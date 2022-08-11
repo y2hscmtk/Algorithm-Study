@@ -23,4 +23,12 @@
 
 # 아이디어 : 결국 여러 개의 행에서 가장 작은수의 카드들 중, 가장 큰 수를 뽑는 것이 목표이므로 입력받은 행열을 각각 오름차순으로 분류하여 가장 첫번째 항끼리 비교한다.
 
-n, k = map(int,input().split())
+n,m = map(int,input().split())
+
+result = 0
+for i in range(n):
+    data = list(map(int,input().split()))
+    min_data = min(data)
+    result = max(result,min_data)
+
+print(result)
