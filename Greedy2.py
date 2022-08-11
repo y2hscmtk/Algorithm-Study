@@ -27,16 +27,20 @@ max2 = data[N-2] #두번째로 큰 값
 
 result = 0 #결과를 저장할 변수
 
-while M!=0:
-    if M>=K:
-        result += max1*K #가장 큰 값을 K번 더한 값 저장
-        M-=K
-    else:
-        if M>=1:
-            result += max2 #두번째로 큰 값을 한 번 더하여 저장
-            M-=1
+while True:
+    for i in range(K): #가장 큰 수를 K번 더하기
+        if M == 0:
+            break;
+        result+=max1
+        M -= 1 #더할 때마다 1씩 빼기
+    if M==0:
+        break
+    result += max2 # 두번째로 큰 수를 한 번 더하기
+    M-=1 #더할 때마다 1씩 빼기
 
 print(result)
+
+#오류 수정 Greedy2 Final에서 짠 코드로는 K번을 곱하기때문에, K번 이하로 더하는경우가 불가능, 반복문을 활용하는편이 좋았다.
     
  
  
