@@ -13,8 +13,11 @@
 #입력조건 : 첫째줄에 N과 K가 공백으로 구분되어 각각 자연수로 주어진다. 이때 N은 항상 K보다 크거나 같다.
 #출력 : 수행하는 최소횟수를 출력한다.
 
+import time
+
 n,k=map(int,input().split())
 
+time_1 = time.perf_counter()
 count=0
 while n!=1:
     if n%k==0: #n이 k의 배수라면?
@@ -23,5 +26,7 @@ while n!=1:
     else:
         count+=1
         n-=1
-
+time_2 = time.perf_counter()
 print(count)
+time_interval = time_2 - time_1
+print(time_interval)
