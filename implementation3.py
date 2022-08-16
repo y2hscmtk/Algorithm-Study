@@ -16,7 +16,7 @@ point = input()
 
 row = point[0] #열 정보(a,b,c//)
 line = int(point[1]) #행 정보(1,2,3//)
-result = 0
+result =0 
 
 if 'c'<=row<='f' and 3<=line<=6:
     result = 8 #C3~f3~C3~C6 범위의 경우 이동할 수 있는 경우의 수 8가지 발생
@@ -27,11 +27,11 @@ elif 3<=line<=6 and (row=='b'or row=='g'):
 elif (line==2 or line==7) and (row=='b' or row=='g'):
     result = 4 #검은색 영역
 elif (line==1 or line==8) and 'b'<=row<='g':
-    reuslt = 3 #빨간색 영역
+    result = 3 #빨간색 영역
 elif 2<=line<=7 and (row=='a'or row=='h'):
-    result = 3
+    result = 3 #빨간색 영역
 else:
-    result = 2
+    result = 2 #각 꼭짓점
     
 print(result)    
 
