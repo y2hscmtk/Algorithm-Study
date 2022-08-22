@@ -20,32 +20,36 @@
 
 n = int(input())
 
-x, y = 1, 1 # x, y 초기 좌표 설정
+# 동 서 남 북
+# R  L  D  B
+dx = (0,0,1,-1)
+dy = (1,-1,0,0)
 
-data = list(input().split())
+#x y 초기위치 설정
+x,y = 1,1
 
-for i in data:
-    if i=='R':
-        y+=1
-        print(x,y)
-    elif i=='L':
-        y-=1
-        print(x,y)
-    elif i=='U':
-        x-=1
-        print(x,y)
-    elif i=='D':
-        x+=1
-        print(x,y)
-    # x,y 좌표가 정해진 영역 밖으로 이동할경우 고려
-    if x==0:
-        x+=1
-    if x>n:
-        x-=1
-    if y==0:
-        y+=1
-    if y>n:
-        y-=1
+#공백으로 구분하여 이동스케쥴 입력받기
+move = input().split()
 
+for m in move:
+    if m == 'R':
+        mx = x + dx[0]
+        my = y + dy[0]
+    elif m == 'L':
+        mx = x + dx[1]
+        my = y + dy[1]
+    elif m == 'D':
+        mx = x + dx[2]
+        my = y + dy[2]
+    elif m == 'B':
+        mx = x + dx[3]
+        my = y + dy[3]
+    #정사각형 공간을 벗어나는 움직임인지 체크
+    if (mx<1 and mx>n) or (my<1 and my>n):
+        continue #해당 움직임 무시
+    else: #정사각형 공간을 벗어나지 않았다면, 해당 움직임 허용
+        x = mx
+        y = my
+#최종 출력 결과
 print(x,y)
 
