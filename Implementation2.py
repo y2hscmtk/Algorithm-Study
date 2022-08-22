@@ -22,3 +22,18 @@ n = int(input())
 # 분 : 3, 13, 23, 30,31,32,33,34,35,36,37,38,39, 43, 53 => 15번
 
 count = 0
+
+#3이 들어가는 조건의 수
+check_list = (3,13,23,30,31,32,33,34,35,36,37,38,39,43,53)
+
+for h in range(n+1):
+    if h in check_list: #해당 시간안에 3이 들어간다면 count++
+        count+=1
+    for m in range(60):
+        if m in check_list: #해당 분안에 3이 들어간다면 count++
+            count+=1
+        for s in range(60):
+            if s in check_list: #해당 초안에 3이 들어간다면 count++
+                count+=1
+                
+print(count)
