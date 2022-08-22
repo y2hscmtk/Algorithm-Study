@@ -27,13 +27,8 @@ count = 0
 check_list = (3,13,23,30,31,32,33,34,35,36,37,38,39,43,53)
 
 for h in range(n+1):
-    if h in check_list: #해당 시간안에 3이 들어간다면 count++
-        count+=1
     for m in range(60):
-        if m in check_list: #해당 분안에 3이 들어간다면 count++
-            count+=1
         for s in range(60):
-            if s in check_list: #해당 초안에 3이 들어간다면 count++
-                count+=1
-                
+            if '3' in str(h)+str(m)+str(s): #해당 시간을 문자열로 만들어서 3이 들어가는지 확인한다 => 예를들어 3시 25분 25초라면 '032035'로 만들어 확인한다.
+                count += 1
 print(count)
