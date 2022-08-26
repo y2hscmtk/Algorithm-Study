@@ -14,3 +14,22 @@
 
 n = int(input())
 
+# 입력받은 정수를 저장할 배열(리스트) 생성
+array = []
+for i in range(n): #n개의 자연수를 입력받을것이기 때문에 n번 반복
+    array.append(int(input())) #정수로 입력받아 array에 append
+    
+# 선택정렬 실시
+# array = sorted(array,reverse =True) 파이썬 기본 라이브러리로 가능
+
+for i in range(n):
+    max_index = i
+    for j in range(i+1,n):
+        if array[max_index]<array[j]: #내림차순은 큰 수가 가장 첫번째 인덱스에 존재해야 함 
+            max_index = j
+    array[i],array[max_index] = array[max_index],array[i] #두 수의 위치를 스왑
+             
+for i in array:
+    print(i,end =' ')
+    
+    
