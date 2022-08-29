@@ -30,34 +30,47 @@
 
 # 아이디어 : 배열 A를 크기순으로 len(A)-k번째 수까지를 더하고 남은 K개의 수와 배열 B에서 가장 큰 K개의 수를 비교하여 B의 수가 더 크다면 그만큼 바꿔치기 연산을 수행한다.
 
-# n,k 공백으로 구분하여 정수로 입력받기
+# # n,k 공백으로 구분하여 정수로 입력받기
+# n, k = map(int,input().split())
+
+# #공백으로 구분하여 정수를 입력받아 리스트 A에 저장
+# a = list(map(int,input().split()))
+
+# #공백으로 구분하여 정수를 입력받아 리스트 B에 저장
+# b = list(map(int,input().split()))
+
+# result = 0 # 합계를 더하여 출력할 변수
+# #a와 b 오름차순으로 정리
+# a.sort()
+# b.sort()
+# tmp = []
+# #a에서 큰 데이터 저장
+# for i in range(1,len(a)-k+1):
+#     result += a[-i]
+
+# # #b에서 k개의 큰 데이터 따로 저장
+# for i in range(1,k+1):
+#     tmp.append(b[-i])
+    
+# for i in range(k):
+#     if a[i]<tmp[i]:
+#         result+=tmp[i]
+#     else:
+#         result+=a[i]
+    
+# print(result)
+
 n, k = map(int,input().split())
-
-#공백으로 구분하여 정수를 입력받아 리스트 A에 저장
 a = list(map(int,input().split()))
-
-#공백으로 구분하여 정수를 입력받아 리스트 B에 저장
 b = list(map(int,input().split()))
 
-result = 0 # 합계를 더하여 출력할 변수
-#a와 b 오름차순으로 정리
-a.sort()
-b.sort()
-tmp = []
-#a에서 큰 데이터 저장
-for i in range(1,len(a)-k+1):
-    result += a[-i]
+a.sort() #오름차순 정렬
+b.sort(reverse=True) #내림차순 정렬 
 
-# #b에서 k개의 큰 데이터 따로 저장
-for i in range(1,k+1):
-    tmp.append(b[-i])
-    
 for i in range(k):
-    if a[i]<tmp[i]:
-        result+=tmp[i]
+    if a[i]<b[i]:
+        a[i],b[i] = b[i],a[i] #스왑
     else:
-        result+=a[i]
-    
-print(result)
+        break #A의 원소가 B의 원소보다 크거나 같을 때, 반복문을 탈출
 
- 
+print(sum(a))
