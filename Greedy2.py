@@ -41,6 +41,3 @@ while True:
 print(result)
 
 #오류 수정 Greedy2 Final에서 짠 코드로는 K번을 곱하기때문에, K번 이하로 더하는경우가 불가능, 반복문을 활용하는편이 좋았다.
-    
- 
- 
