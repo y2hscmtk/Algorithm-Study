@@ -2,7 +2,8 @@
 
 # 백준 3190번 구현 알고리즘 문제
 
-#  'Dummy' 라는 도스게임이 있다. 이 게임에는 뱀이 나와서 기어다니는데, 사과를 먹으면 뱀 길이가 늘어난다. 뱀이 이리저리 기어다니다가 벽 또는 자기자신의 몸과 부딪히면 게임이 끝난다.
+#  'Dummy' 라는 도스게임이 있다. 이 게임에는 뱀이 나와서 기어다니는데, 사과를 먹으면 뱀 길이가 늘어난다.
+#  뱀이 이리저리 기어다니다가 벽 또는 자기자신의 몸과 부딪히면 게임이 끝난다.
 
 # 게임은 NxN 정사각 보드위에서 진행되고, 몇몇 칸에는 사과가 놓여져 있다. 보드의 상하좌우 끝에 벽이 있다. 게임이 시작할때 뱀은 맨위 맨좌측에 위치하고 뱀의 길이는 1 이다. 뱀은 처음에 오른쪽을 향한다.
 
@@ -28,9 +29,9 @@
 
 # 빈 공간은 0, 사과는 1, 뱀이 지나간 경로는 2로 표현한다. 뱀의 머리는 3으로 표현한다.
 # 뱀의 이동경로를 조작하기 위한 리스트, 방향은 북 동 남 서 순으로 이동한다.
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
-d = [0, 1, 2, 3]  # 현재 뱀의 머리가 바라보는 방향 북 동 남 서 방향순
+dr = [-1, 0, 1, 0]
+dc = [0, 1, 0, -1]
+# d = [0, 1, 2, 3]  # 현재 뱀의 머리가 바라보는 방향 북 동 남 서 방향순
 time = 0  # 뱀이 이동한 시간
 
 n = int(input())  # 경기판의 크기 n x n
@@ -46,15 +47,84 @@ for _ in range(k):  # k번 반복하여, 사과를 놓을 위치 설정
 
 l = int(input())  # 뱀이 회전하는 횟수
 
+t = []
 turn = []  # 뱀이 회전하는 시간, 방향에 대한 정보 저장 (시간,방향(L은 왼쪽으로 90도, D는 오른쪽으로 90도 회전))
 
 for i in range(l):
     data = input().split()
-    turn.append((int(data[0]), data[1]))
+    t.append(int(data[0]))
+    turn.append(data[1])
 
 # 뱀의 머리
 array[0][0] = 3
-direction = d[1]  # 뱀은 처음에 오른쪽을 향한다.
+direction = 1  # 뱀은 처음에 오른쪽을 향한다.
+r, c = 0, 0  # 뱀의 초기 위치
+body = 0  # 몸통의 길이
+# 뱀의 꼬리
+tr, tc = r, c
 
 while True:
-    time += 1  # 뱀은 매 초마다 움직임을 수행한다.
+    # time += 1  # 뱀은 매 초마다 움직임을 수행한다.
+    # 뱀이 회전을 하는지 확인
+    # 회전한다면, 방향을 바꿔 사과 찾기 알고리즘을 수행
+    if time in t:  # 해당 시간에, 뱀이 회전을 한다면
+        at = t.index(time)
+        if turn[at] == 'L':
+            direction -= 1
+            if direction == -1:
+                direction = 3
+            # direction = d[direction-1]  # 왼쪽으로 90도 회전
+        elif turn[at] == 'D':
+            direction += 1
+            if direction == 4:
+                direction = 0
+            # direction = d[direction+1]  # 오른쪽으로 90도 회전
+    # 회전하지 않는다면, 현재 방향으로 계속 이동하며 사과 찾기 알고리즘을 수행
+
+    # 빈 공간 0 사과 1 뱀의 이동경로 2 뱀의 머리 3
+    # 뱀이 바라보는 방향으로 한 칸 이동
+
+    # 뱀의 임시 머리칸
+    ar = r + dr[direction]
+    ac = c + dc[direction]
+
+    # 영역을 벗어나지 않았는지 확인
+    if ar < 0 or ar >= n or ac < 0 or ac >= n:
+        time += 1
+        break
+    if array[ar][ac] == 1:  # 사과가 있다면?
+        body += 1  # 몸 길이 +1
+        array[r][c] = 2  # 머리를 몸으로 변경
+        array[tr][tc] = 3  # 꼬리 설정
+    elif array[ar][ac] >= 2:  # 몸과 부딛힐경우
+        time += 1
+        break
+    elif array[ar][ac] == 0:  # 사과가 없는 빈 공간으로 이동할 경우
+        # 머리를 앞으로 이동한 후, 머리와 몸까지의 영역을 몸으로 변경하는 작업 필요 => 머리와 몸이 분리될수 있음
+        # 방향에 따라서 작업 실행
+        if direction == 0:
+            for i in range(1, body+1):
+                array[ar-i][ac] = 2
+            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
+            tr = tr+1
+        elif direction == 1:
+            for i in range(1, body+1):
+                array[ar][ac-i] = 2
+            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
+            tc = tc+1
+        elif direction == 2:
+            for i in range(1, body+1):
+                array[ar+i][ac] = 2
+            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
+            tr = tr-1
+        elif direction == 3:
+            for i in range(1, body+1):
+                array[ar][ac+i] = 2
+            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
+            tc = tc-1
+    time += 1
+    r = ar
+    c = ac  # 다음칸으로 이동
+    array[r][c] = 3  # 머리 이동
+
+print(time)
