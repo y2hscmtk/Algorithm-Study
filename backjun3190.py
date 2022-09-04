@@ -27,7 +27,8 @@
 # 게임 시작 시간으로부터 X초가 끝난 뒤에 왼쪽(C가 'L') 또는 오른쪽(C가 'D')로 90도 방향을 회전시킨다는 뜻이다. X는 10,000 이하의 양의 정수이며, 방향 전환 정보는 X가 증가하는 순으로 주어진다.
 
 
-# 빈 공간은 0, 사과는 1, 뱀이 지나간 경로는 2로 표현한다. 뱀의 머리는 3으로 표현한다.
+from collections import deque  # 뱀의 이동경로를 저장하기 위해 덱 자료구조를 사용한다.
+# 빈 공간은 0, 사과는 1, 뱀이 지나간 경로는 2로 표현한다.
 # 뱀의 이동경로를 조작하기 위한 리스트, 방향은 북 동 남 서 순으로 이동한다.
 dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
@@ -43,7 +44,7 @@ k = int(input())  # 사과의 개수를 의미
 for _ in range(k):  # k번 반복하여, 사과를 놓을 위치 설정
     # 공백으로 구분하여 사과를 놓을 위치 array[r][c]를 입력받는다
     row, column = map(int, input().split())
-    array[row][column] = 1  # 사과가 존재하는 장소는 1로 표현한다.
+    array[row-1][column-1] = 1  # 사과가 존재하는 장소는 1로 표현한다.
 
 l = int(input())  # 뱀이 회전하는 횟수
 
@@ -56,15 +57,17 @@ for i in range(l):
     turn.append(data[1])
 
 # 뱀의 머리
-array[0][0] = 3
+array[0][0] = 2
 direction = 1  # 뱀은 처음에 오른쪽을 향한다.
 r, c = 0, 0  # 뱀의 초기 위치
-body = 0  # 몸통의 길이
+body = 1  # 뱀의 길이
 # 뱀의 꼬리
-tr, tc = r, c
+# tr, tc = r, c
+d = deque()  # 뱀의 이동경로를 저장
+d.append((r, c))  # 초기 위치 덱에 삽입
 
 while True:
-    # time += 1  # 뱀은 매 초마다 움직임을 수행한다.
+    # 뱀은 매 초마다 움직임을 수행한다.
     # 뱀이 회전을 하는지 확인
     # 회전한다면, 방향을 바꿔 사과 찾기 알고리즘을 수행
     if time in t:  # 해당 시간에, 뱀이 회전을 한다면
@@ -93,38 +96,24 @@ while True:
         time += 1
         break
     if array[ar][ac] == 1:  # 사과가 있다면?
-        body += 1  # 몸 길이 +1
+        body += 1  # 뱀의 길이+1
+        d.append((ar, ac))  # 해당 좌표를 덱에 삽입
         array[r][c] = 2  # 머리를 몸으로 변경
-        array[tr][tc] = 3  # 꼬리 설정
-    elif array[ar][ac] >= 2:  # 몸과 부딛힐경우
+        r = ar
+        c = ac  # 다음칸으로 이동
+        array[r][c] = 2  # 머리 이동
+    elif array[ar][ac] == 2:  # 몸과 부딛힐경우
         time += 1
         break
     elif array[ar][ac] == 0:  # 사과가 없는 빈 공간으로 이동할 경우
-        # 머리를 앞으로 이동한 후, 머리와 몸까지의 영역을 몸으로 변경하는 작업 필요 => 머리와 몸이 분리될수 있음
-        # 방향에 따라서 작업 실행
-        if direction == 0:
-            for i in range(1, body+1):
-                array[ar-i][ac] = 2
-            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
-            tr = tr+1
-        elif direction == 1:
-            for i in range(1, body+1):
-                array[ar][ac-i] = 2
-            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
-            tc = tc+1
-        elif direction == 2:
-            for i in range(1, body+1):
-                array[ar+i][ac] = 2
-            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
-            tr = tr-1
-        elif direction == 3:
-            for i in range(1, body+1):
-                array[ar][ac+i] = 2
-            array[tr][tc] = 0  # 꼬리가 있던 위치를 빈 공간으로 변경
-            tc = tc-1
+        # 꼬리를 빈 공간으로 변경
+        a, b = d.popleft()  # 꼬리를 팝한다.
+        array[a][b] = 0  # 기존에 꼬리였던 공간을 빈공간으로 변경한다.
+        r = ar
+        c = ac  # 다음칸으로 이동
+        array[r][c] = 2  # 머리 이동
+        d.append((r, c))  # 머리 정보 변경
     time += 1
-    r = ar
-    c = ac  # 다음칸으로 이동
-    array[r][c] = 3  # 머리 이동
+
 
 print(time)
