@@ -6,8 +6,4 @@
 
 # 백준 1541번 실버2
 
-array = []
-
-array.append(list(map(int, input().split('-'))))
-
-print(array)
+a = input().split('-')
