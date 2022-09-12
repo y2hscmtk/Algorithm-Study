@@ -21,8 +21,6 @@ word = []
 for i in range(n):
     word.append(input())
 
-mword = []
-
 word_data = [0]*26  # 알파벳은 26글자 , 단어는 최대 8글자 이므로 10의 8승을 데이터가 할당되지않은값으로 둔다.
 
 for i in range(n):
@@ -31,7 +29,6 @@ for i in range(n):
     for j in range(size-1, -1, -1):
         if k > size-1:
             break
-        mword.append((word[i][k], 10**j))
         word_data[ord(word[i][k])-65] += 10**j  # 워드 데이터에 값 할당
         k += 1
 
