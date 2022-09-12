@@ -14,13 +14,35 @@
 # BCD
 # ABC
 # => 100B + 10C + D + 100A + 10B + C => 110B + 100A + 11C + D
+
 n = int(input())
 
 word = []
 for i in range(n):
     word.append(input())
 
-word_data = [-1]*26
+mword = []
 
-test = 1
-test = 2
+word_data = [0]*26  # 알파벳은 26글자 , 단어는 최대 8글자 이므로 10의 8승을 데이터가 할당되지않은값으로 둔다.
+
+for i in range(n):
+    k = 0
+    size = len(word[i])  # 단어의 길이만큼
+    for j in range(size-1, -1, -1):
+        if k > size-1:
+            break
+        mword.append((word[i][k], 10**j))
+        word_data[ord(word[i][k])-65] += 10**j  # 워드 데이터에 값 할당
+        k += 1
+
+# print(mword)
+max_sum = 0
+word_data.sort(reverse=True)  # 내림차순 정렬
+size = 9
+for i in range(26):
+    if word_data[i] != 0:  # 사용중인 알파벳인경우에 한에
+        word_data[i] *= size
+        size -= 1
+        max_sum += word_data[i]
+
+print(max_sum)
