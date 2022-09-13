@@ -14,18 +14,14 @@ for i in range(m):
 six_set.sort()  # 오름차순 정렬
 one_set.sort()  # 내림차순 정렬
 
-if n >= 6:
-    if n % 6 == 0:  # 6개의 배수개일때
-        min_price = six_set[0]*n//6
-    else:
-        min_price = six_set[0]*(n//6) + one_set[0]*(n % 6)
-    if six_set[0]*(n//6) + six_set[0] < min_price:
-        min_price = six_set[0]*(n//6) + six_set[0]
-elif n < 6:
-    # 1개 들이로만 살때와 6개들이로 사서 양을 초과할때를 서로 비교
-    if one_set[0]*n < six_set[0]:
-        min_price = one_set[0]*n
-    else:
-        min_price = six_set[0]  # 초과해서 살때가 더 쌀수 있음
+if n % 6 == 0:  # 6개의 배수개일때
+    min_price = six_set[0]*n//6
+else:
+    min_price = six_set[0]*(n//6) + one_set[0]*(n % 6)
+if six_set[0]*(n//6) + six_set[0] < min_price:
+    min_price = six_set[0]*(n//6) + six_set[0]
+if one_set[0]*n < min_price:
+    min_price = one_set[0]*n
+
 
 print(min_price)
