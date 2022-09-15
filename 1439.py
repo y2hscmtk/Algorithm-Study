@@ -10,8 +10,29 @@
 
 # 아이디어: 배열 s를 0과 1 둘 중 하나의 수를 기준으로 잡고, 떨어져있는 덩어리가 몇개인지 파악하고, 반복결과 최솟값을 출력한다.
 
-s = [int(input())]  # 정수 배열 s 입력받기
-
-count = 0
+s = list(map(int, input()))
+count = 0  # 1묶음의 개수
+count2 = 0
+check = 0
 # 0에 대하여 반복 실행
 for i in range(len(s)):  # 배열 s의 길이만큼 반복 실행
+    if s[i] == 0:
+        check = 0
+    elif s[i] != 0:  # 해당 배열의 인덱스가 1이라면
+        check += 1  # 1묶음의 최초 1을 만났을때 check를 +1해줌 => 1묶음의 두번째 1을 만나면 2이상의 숫자가 될것
+        if check == 1:  # 1묶음의 첫번째 요소를 만났을때에 한하여, 묶음의 개수를 증가시킨다.
+            count += 1  # 1묶음의 개수 +1
+
+check = 0
+for i in range(len(s)):  # 배열 s의 길이만큼 반복 실행
+    if s[i] == 1:
+        check = 0
+    elif s[i] != 1:  # 해당 배열의 인덱스가 1이라면
+        check += 1  # 1묶음의 최초 1을 만났을때 check를 +1해줌 => 1묶음의 두번째 1을 만나면 2이상의 숫자가 될것
+        if check == 1:  # 1묶음의 첫번째 요소를 만났을때에 한하여, 묶음의 개수를 증가시킨다.
+            count2 += 1  # 1묶음의 개수 +1
+
+if count < count2:
+    print(count)
+else:
+    print(count2)
