@@ -20,13 +20,10 @@ w.sort()  # 오름차순 정렬
 start, end = 0, 0
 mstart, mend = 0, 0
 result = 0
+
 for i in w:
-    if i == 1:
-        end += 1
-        continue
-    if i != 1:
-        mstart += i
-        mend = end + i
+    mstart = start + i
+    mend = end + i
     if (mstart <= end) or (mstart-end == 1):  # 새로운 무게추가 추가되었을때, 연결이 되어있는지 아닌지를 확인
         start = 0
         end = mend
@@ -35,5 +32,7 @@ for i in w:
         result = end + 1
         break
 
-
-print(result)
+if result == 0:
+    print(end+1)
+else:
+    print(result)
