@@ -15,7 +15,8 @@ num_data = []
 
 for i in range(len(data)):
     num = ''.join(data[i])
-    num_data.append(int(num))
+    if int(num) % 30 == 0:
+        num_data.append(int(num))
 
 num_data.sort(reverse=True)  # 내림차순 정렬
 
