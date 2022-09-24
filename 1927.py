@@ -9,7 +9,10 @@ n = int(input())  # 연산의 횟수
 min_heap = [0]*n  # 입력받은 크기만큼 배열을 생성한다.
 heap_size = 0  # 힙 사이즈
 
-
+j = 1  # 루트 노드의 인덱스
+left_child = 2*j  # 왼쪽 자식
+right_child = 2*j+1  # 오른쪽 자식
+min_child = 2*j
 # 팝 연산은 가장 작은 값을 배열에서 출력하고, 그 값을 배열에서 제거한다 => 나머지 노드들에 대하여 위치 재설정이 필요하다.
 
 
@@ -25,11 +28,7 @@ for i in range(n):
             min_heap[1] = min_heap[heap_size]
             min_heap[heap_size] = 0  # 해당 자리를 비움
             heap_size -= 1
-            j = 1  # 루트 노드의 인덱스
-            left_child = 2*j  # 왼쪽 자식
-            right_child = 2*j+1  # 오른쪽 자식
-            min_child = 2*j
-            while j <= n:  # 데이터의 끝까지 비교
+            while True:  # 데이터의 끝까지 비교
                 # 두 자식 중 더 작은 자식 탐색
                 if min_heap[left_child] != 0 and min_heap[right_child] != 0:
                     if min_heap[left_child] < min_heap[right_child]:
@@ -50,11 +49,11 @@ for i in range(n):
         heap_size += 1  # 힙의 크기를 1 증가시키고,
         # 우선 힙의 말단에 데이터를 삽입하고, 루트노드까지 반복하며 크기를 비교한다.
         min_heap[heap_size] = item
-        j = heap_size  # 현재 노드의 인덱스 번호를 저장
-        while j > 1:
-            root = j//2  # 부모노드 설정
-            if min_heap[j] < min_heap[root]:  # 부모보다 더 작은 경우 위치를 서로 바꿔야함
-                min_heap[j], min_heap[root] = min_heap[root], min_heap[j]  # 스와핑
-                j = j//2  # 노드 인덱스 재설정
+        k = heap_size  # 현재 노드의 인덱스 번호를 저장
+        while k > 1:
+            root = k//2  # 부모노드 설정
+            if min_heap[k] < min_heap[root]:  # 부모보다 더 작은 경우 위치를 서로 바꿔야함
+                min_heap[k], min_heap[root] = min_heap[root], min_heap[k]  # 스와핑
+                k = k//2  # 노드 인덱스 재설정
             else:
                 break
