@@ -15,14 +15,16 @@ for _ in range(n):
 
 count = 0
 
-while heap:  # 힙이 존재하는 동안
-    e1 = heappop(heap)
-    e2 = heappop(heap)
-    item = e1 + e2
-    count += item
-    if len(heap) == 0:
-        break  # 힙이 비워져있다면 모든 반복을 마쳤다는 뜻
-    heappush(heap, item)
-
+if len(heap) >= 2:
+    while heap:  # 힙이 존재하는 동안
+        e1 = heappop(heap)
+        e2 = heappop(heap)
+        item = e1 + e2
+        count += item
+        if len(heap) == 0:
+            break  # 힙이 비워져있다면 모든 반복을 마쳤다는 뜻
+        heappush(heap, item)
+else:
+    count += heappop(heap)
 
 print(count)
