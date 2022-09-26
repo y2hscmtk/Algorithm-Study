@@ -1,18 +1,5 @@
+# 백준 1715번
+
+# 아이디어 : 우선순위 큐와 허프만 코드 생성과정을 이용한다.
+
 n = int(input())
-
-card = []
-
-for i in range(n):
-    card.append(int(input()))
-
-card.sort()  # 오름차순 변경
-
-sum = 0
-
-for i in range(n):
-    for j in range(0, i+1):
-        sum += card[j]
-
-sum - card[0]
-
-print(sum)
