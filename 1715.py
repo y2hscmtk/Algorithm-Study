@@ -24,7 +24,5 @@ if len(heap) >= 2:
         if len(heap) == 0:
             break  # 힙이 비워져있다면 모든 반복을 마쳤다는 뜻
         heappush(heap, item)
-else:
-    count += heappop(heap)
 
 print(count)
