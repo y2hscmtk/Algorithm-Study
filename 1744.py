@@ -37,22 +37,25 @@
 '''
 
 n = int(input())
+zero = []  # 0을 저장할 배열
 one = []
-positive_array = []  # 양수를 저장할 배열
+possitive_array = []  # 양수를 저장할 배열
 negative_array = []  # 음수를 저장할 배열
 max_sum = 0
 
 for _ in range(n):
     number = int(input())
     if number > 1:
-        positive_array.append(number)
-    elif number <= 0:
+        possitive_array.append(number)
+    elif number < 0:
         negative_array.append(number)
+    elif number == 0:
+        zero.append(number)
     else:
-        one.append(1)
+        one.append(number)
 
-positive_array.sort(reverse=True)  # 내림차순
-negative_array.sort()
+possitive_array.sort(reverse=True)  # 오름차순
+negative_array.sort(reverse=True)  # 내림차순 -1, -2, -3 ...
 
 # 최대합 구하는 과정
 
@@ -60,22 +63,29 @@ negative_array.sort()
 max_sum = sum(one)
 
 # 1단계: 양수 배열에서 2개씩 곱해가며 더한다.
-for i in range(0, len(positive_array), 2):
-    if i+1 < len(positive_array):
+for i in range(0, len(possitive_array), 2):
+    if i+1 < len(possitive_array):
         # 가장 큰수와 두번째로 큰수를 곱해서 더한다.
-        max_sum += (positive_array[i]*positive_array[i+1])
+        max_sum += (possitive_array[i]*possitive_array[i+1])
     else:
         # 양수가 홀수개 있을경우 홀로 남은 수는 더한다.
-        max_sum += positive_array[i]
+        max_sum += possitive_array[i]
 
-# 3단계: 0과 음수 처리
-# 만약 홀수개라면
-if len(negative_array) % 2 != 0:
-    max_sum += negative_array[len(negative_array)-1]  # 가장 작은 원소 더하기
-    for i in range(0, len(negative_array)-1, 2):
+# 2단계: 0처리
+if len(zero) != 0:
+    # 0은 음수와 곱하는 과정을 통해 음수를 제거할수 있다.
+    # 음수가 짝수개 일 경우 음수끼리 곱해서 양수를 만드는것이 이득이므로
+    # 0은 모두 무시한다.
+    if len(negative_array) % 2 != 0:  # 음수가 홀수개인 경우만 해당 계산 진행
+        # 가장 큰 음수를 제거하면 나머지 값들을 곱하여 최대값으로 만들 수 있다!
+        del negative_array[0]
+
+negative_array.sort()  # 오름차순 정렬 -3,-2,-1...
+# 3단계: 음수 처리
+for i in range(0, len(negative_array), 2):
+    if i+1 < len(negative_array):
         max_sum += (negative_array[i]*negative_array[i+1])
-else:
-    for i in range(0, len(negative_array), 2):
-        max_sum += (negative_array[i]*negative_array[i+1])
+    else:
+        max_sum += negative_array[i]
 
 print(max_sum)
