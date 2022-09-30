@@ -23,7 +23,8 @@
 양수인 경우에 대해서, 
 1인 경우는 다른 수와 곱하지 않고 더한다.
 양수는 큰수끼리 곱하면 더 커진다.
-음수인 경우에 대해서, 음수는 음수끼리 곱하면 양수가 되고, 이 경우에는 큰 음수끼리 곱하고 남은 수를 더하는것이 이득이다.
+
+음수인 경우에 대해서, 음수는 음수끼리 곱하면 양수가 되고, 이 경우에는 작은 음수끼리 곱하고 남은 수를 더하는것이 이득이다.
 (-1,-2,-3) => 6-1 = 5 (max)
 
 0인 경우에 대해서,
@@ -49,7 +50,7 @@ for _ in range(n):
     number = int(input())
     if number > 1:
         possitive_array.append(number)
-    elif number < 1:
+    elif number < 0:
         negative_array.append(number)
     elif number == 0:
         zero.append(number)
@@ -80,7 +81,14 @@ if len(zero) != 0:
     # 0은 모두 무시한다.
     if len(negative_array) % 2 != 0:  # 음수가 홀수개인 경우만 해당 계산 진행
         for i in range(len(zero)):
-            del zero(i)  # 음수의 개수만큼
+            del negative_array[i]  # 음수의 개수만큼
 
+negative_array.sort()  # 오름차순 정렬 -3,-2,-1...
 # 3단계: 음수 처리
 for i in range(0, len(negative_array), 2):
+    if i+1 < len(negative_array):
+        max_sum += (negative_array[i]*negative_array[i+1])
+    else:
+        max_sum += negative_array[i]
+
+print(max_sum)
