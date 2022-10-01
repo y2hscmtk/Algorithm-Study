@@ -16,7 +16,7 @@
 크레인의 개수만큼 매칭을 완료하였다면 +1분을 하고 다음 차례로 넘어감
 이때 모든 박스를 크레인에 실었거나, 남은 크레인의 무게로는 실을수 없는 무게의 박스라면 +1시키고 다음 차례로 넘어간다.
 '''
-
+import sys
 n = int(input())  # 크레인의 개수
 
 crane = list(map(int, input().split()))
@@ -30,24 +30,25 @@ minute = 0  # 걸리는 최소 시간
 crane.sort(reverse=True)  # 내림차순 정렬
 box.sort(reverse=True)
 
-index = 0
-
+if box[0] > crane[0]:
+    print(-1)
+    sys.exit()
 j = 0
+index = 0
 
 while box:  # 박스를 모두 옮길때 까지 반복
     # check = False
+
+    if box[j] <= crane[index]:  # 가장 큰 무게의 크레인보다 작거나 같은 무게라면
+        del box[j]  # 해당요소는 배에 실었으므로 제거
+        index += 1
+    else:
+        j += 1  # 다음 배열에 대해 비교
+
     if j == len(box):
         j = 0
         index = 0
         minute += 1
-    if box[j] <= crane[index]:  # 가장 큰 무게의 크레인보다 작거나 같은 무게라면
-        del box[j]  # 해당요소는 배에 실었으므로 제거
-        index += 1
-    elif box[j] > crane[0]:  # 가장 큰 무게의 크레인보다 큰 박스가 있다면
-        print(-1)  # 실을수 없음
-        break
-    else:
-        j += 1  # 다음 배열에 대해 비교
 
     if index >= n:  # 한번에 실을수 있는 모든 박스를 실었다면, 초기화
         # check = True
