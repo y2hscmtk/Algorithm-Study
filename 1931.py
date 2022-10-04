@@ -23,16 +23,13 @@ for _ in range(n):
     data.append(list(map(int, input().split()),))
 
 # 수업시간이 짧고, 수업이 일찍 시작하는 순서대로 배열 재정렬
-# x[0] : 수업시간, x[1]-x[0] : 총 수업시간 => x[1]
-# 두 합이 작은 순으로 배열을 정렬시킨다.
-data.sort(key=lambda x: x[1])  # 총 수업시간이 작은 순대로 데이터를 정렬시킨다.
+data.sort(key=lambda x: x[0])  # 2차적으로 수업시작시간이 작은 순대로 정렬시킨다.
+sorted_list = sorted(data, key=lambda x: x[1])  # 총 수업시간이 작은 순대로 데이터를 정렬시킨다.
 
-count = 0
 c = []  # 수업
-c.append(data[0])
+c.append(sorted_list[0])
 for i in range(1, n):
-    if c[count][1] <= data[i][0]:  # 이전 수업시간 이후에 수업이 시작하는지 확인
-        c.append(data[i])
-        count += 1
+    if c[-1][1] <= sorted_list[i][0]:  # 이전 수업시간 이후에 수업이 시작하는지 확인
+        c.append(sorted_list[i])
 
-print(count+1)
+print(len(c))
