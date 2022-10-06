@@ -22,6 +22,15 @@
 
 => 결론적으로 짝수개의 글자는 짝이 다 맞으므로, 짝수 몇쌍이 존재하던 상관없음
 홀수개의 쌍은 짝수개일때는 존재해선 안되며, 홀수개일때는 홀수개 있어야함, 1개만 있는 글자는 한개만 존재할수 있음
+
+=> 9퍼센트에서 실패
+'''
+
+
+'''
+새로운 아이디어
+
+아몰라 그냥 배치하고 펠린드롬검사해서 실패하면 아임쏘리 출력할래
 '''
 import sys
 w = input()  # 문장을 입력받음
@@ -38,51 +47,27 @@ for i in range(1, len(w)):
         alphabet.append(w[i])
         alphabet_count.append(1)
 
-# 팰린드림 불가 문제에 대해서는 => I'm Sorry Hansoo 출력
-
-count = 0
-for i in range(len(alphabet_count)):
-    if alphabet_count[i] == 1:
-        count += 1
-
-if count > 1:
-    print("I'm Sorry Hansoo")  # 만들 수 없음
-    sys.exit(0)  # 프로그램 종료
-if len(w) % 2 == 0:  # 총 글자수가 짝수개 있을때
-    if count >= 1:  # 1의 개수가 1개 이상 있으면 불가
-        print("I'm Sorry Hansoo")  # 만들 수 없음
-        sys.exit(0)  # 프로그램 종료
-    else:
-        for i in range(len(alphabet_count)):
-            if alphabet_count[i] % 2 != 0:  # 짝수개의 글자수가 존재할경우 홀수개의 단어는 존재해서는 안됨
-                print("I'm Sorry Hansoo")  # 만들 수 없음
-                sys.exit(0)  # 프로그램 종료
-else:
-    if count == 1:  # 1의 개수가 1개일때 나머지가 모두 짝수개 이여야함
-        ncount = 1
-        for i in range(len(alphabet_count)):
-            if alphabet_count[i] % 2 != 0:
-                ncount += 1
-        if ncount % 2 != 0:
-            print("I'm Sorry Hansoo")  # 만들 수 없음
-            sys.exit(0)  # 프로그램 종료
-    else:
-        # 홀수개의 단어는 홀수개만 존재할수 있음
-        ncount = 0
-        for i in range(len(alphabet_count)):
-            if alphabet_count[i] % 2 != 0:
-                ncount += 1
-        if ncount % 2 == 0:  # 홀수개의 쌍이 짝수쌍 존재할경우 AAABB 불가
-            print("I'm Sorry Hansoo")  # 만들 수 없음
-            sys.exit(0)  # 프로그램 종료
+# 아몰라 그냥 일단 배치해
+pl = ['A']*len(w)
 k = 0
-p = ['a']*len(w)
+check = True
 for i in range(len(alphabet)):
-    if alphabet_count[i] % 2 != 0:  # 글자가 홀수개 일경우
-        p[len(w)//2] = alphabet[i]  # 가운데에 해당 글자 삽입
+    if (check):
+        if alphabet_count[i] % 2 != 0:
+            pl[len(w)//2] = alphabet[i]
+            check = False
+    else:
+        print("I'm Sorry Hansoo")  # 거 미안하게 됐수다
+        sys.exit(0)
     for j in range(k, alphabet_count[i]//2+k):
-        p[j] = alphabet[i]
-        p[len(w)-1-j] = alphabet[i]
-    k += alphabet_count[i]//2
+        pl[j] = alphabet[i]
+        pl[len(w)-1-j] = alphabet[i]
+    k += (alphabet_count[i]//2)
 
-print(''.join(p))
+# 팰린 뭐시기 그거 검사 실시
+for i in range(len(pl)//2):
+    if pl[i] != pl[len(pl)-1-i]:  # 두 단어가 일치하지 않는 경우
+        print("I'm Sorry Hansoo")  # 거 미안하게 됐수다
+        sys.exit(0)
+
+print(''.join(pl))  # 완성된 단어
