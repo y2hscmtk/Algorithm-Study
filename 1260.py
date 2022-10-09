@@ -56,7 +56,7 @@ def dfs(adj, v):
         node = stack.pop()  # 현재위치를 의미
         if node not in dfs_visited:
             dfs_visited.append(node)
-            stack.extend(adj[node-1])
+            stack.extend(reversed(adj[node-1]))
     return dfs_visited
 
 
