@@ -32,6 +32,8 @@ for e in edge:  # 간선 리스트에서 간성정보를 한개씩 뽑아서
     adj[e[0]-1].append(e[1])  # 간선 삽입 0번 인덱스부터 삽입되어야 함
     adj[e[1]-1].append(e[0])  # 위 문제의 경우 양방향 리스트임
 
+for i in adj:
+    i.sort()
 # 첫째줄에는 DFS를 수행한 결과 두번째 줄에는 BFS를 수행한 결과를 출력한다.
 
 # DFS 알고리즘 : 깊이 우선 탐색
@@ -39,33 +41,47 @@ for e in edge:  # 간선 리스트에서 간성정보를 한개씩 뽑아서
 # 되돌아가야 되기때문에, 돌아갈 곳의 위치를 저장할 스택이 필요함 => 재귀호출을 통해 묵시적 스택사용이 가능하다.
 
 stack = [v]  # 시작정점은 v임
-dfs_visited = []  # 방문한 정점을 저장할 리시트
-while stack:
-    c = stack.pop()  # 현재위치를 의미
-    dfs_visited.append(c)
-    for neighbor in adj[c-1]:
-        if neighbor not in dfs_visited:
-            stack.append(neighbor)
-            break
+dfs_visited = []  # 방문한 정점을 저장할 리스트
+
+# 참고한 사이트
+# https://data-marketing-bk.tistory.com/44
+
+
+def dfs(adj, v):
+    stack, dfs_visited = list(), list()
+
+    stack.append(v)
+
+    while stack:
+        node = stack.pop()  # 현재위치를 의미
+        if node not in dfs_visited:
+            dfs_visited.append(node)
+            stack.extend(adj[node-1])
+    return dfs_visited
+
 
 # BFS 알고리즘 : 너비 우선 탐색
 # 가까이에 있는 정점을 먼저 방문하고, 멀리 떨어져 있는 정점을 나중에 방문한다.
-# "큐"를 사용하여 구현한다.
+# "큐"를 사용하여 구현한다
 
-bfs_visited = []
-queue = deque()
+def bfs(adj, v):
+    from collections import deque
+    bfs_visited = []
+    queue = deque()
+    queue.append(v)
 
-queue.append(v)
-while queue:
-    c = queue.popleft()
-    bfs_visited.append(c)
-    for neighbor in adj[c-1]:
-        if neighbor not in bfs_visited and neighbor not in queue:
-            queue.append(neighbor)
+    while queue:
+        node = queue.popleft()
+        if node not in bfs_visited:
+            bfs_visited.append(node)
+            queue.extend(adj[node-1])
+
+    return bfs_visited
 
 
-for i in dfs_visited:
+for i in dfs(adj, v):
     print(i, end=' ')
+
 print()
-for i in bfs_visited:
+for i in bfs(adj, v):
     print(i, end=' ')
