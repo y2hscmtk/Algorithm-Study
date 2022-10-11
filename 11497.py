@@ -32,9 +32,18 @@ for _ in range(t):
     tree.sort()
     sorted_tree = [0]*n
     j = 0
-    for i in range(n):
+    for i in range(0, n//2+n % 2):
         sorted_tree[i] = tree[j]  # 가장 작은 값부터 대입
-        if i+1 <= n//2:
-            sorted_tree[-(i+1)] = tree[j+1]
+        if i >= n//2:
+            break
+        sorted_tree[n-1-i] = tree[j+1]
         j += 2
-    print(tree)
+    level = 0
+    for i in range(n):
+        if i+1 < n:
+            temp = sorted_tree[i+1]-sorted_tree[i]
+        else:
+            temp = sorted_tree[i] - sorted_tree[0]
+        if temp > level:
+            level = temp
+    print(level)
