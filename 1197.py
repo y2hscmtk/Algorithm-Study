@@ -18,14 +18,16 @@ C는 음수일 수도 있으며, 절댓값이 1,000,000을 넘지 않는다.
 v, e = map(int, input().split())  # v 정점의 개수, e 간선의 개수
 
 # 가중치가 0으로 초기화된 2차원 행렬을 생성
-adj_mat = []
-for i in range(v):
-    adj_mat.append(['x']*v)  # x는 해당경로로 갈수 없음을 의미
+
+adj_mat = [[] for _ in range(v)]
+
+# for i in range(v):
+#    adj_mat.append(['x']*v)  # x는 해당경로로 갈수 없음을 의미
 
 for _ in range(e):  # 간선의 개수만큼 반복하며 가중치 입력받음
     start, end, weight = map(int, input().split())  # 입력받은 가중치 입력
-    adj_mat[start-1][end-1] = weight  # 문제에서는 시작정점이 1부터이므로
-    adj_mat[end-1][start-1] = weight
+    adj_mat[start-1].append([weight, end-1])  # 문제에서는 시작정점이 1부터이므로
+    adj_mat[end-1].append([weight, start-1])
 
 
 # MST 알고리즘 시작
@@ -38,13 +40,20 @@ select = [0]  # 방문처리
 def get_min_vertix(adj_mat, select, v):
     min_weight = 2147483648
     for s in select:  # select안의 정점들을 하나씩 꺼내서 인접정점 파악
-        for i in range(v):
-            if adj_mat[s][i] == 'x' or i in select:  # 선택한 정점으로의 길은 고려하지않음
-                continue  # 해당경로로는 갈수 없음을 의미
-            if adj_mat[s][i] < min_weight:
-                min_weight = adj_mat[s][i]
-                min_vertix = i
-    return min_vertix, min_weight  # 최소 정점과 그 간선 리턴
+        for e in adj_mat[s]:
+            if e[1] in select:  # 해당 정점이 이미 방문됐다면
+                continue
+            if e[0] < min_weight:
+                min_weight = e[0]
+                min_vertix = e[1]
+    return min_vertix, min_weight
+    # for i in range(v):
+    #     if adj_mat[s][i] == 'x' or i in select:  # 선택한 정점으로의 길은 고려하지않음
+    #         continue  # 해당경로로는 갈수 없음을 의미
+    #     if adj_mat[s][i] < min_weight:
+    #         min_weight = adj_mat[s][i]
+    #         min_vertix = i
+    # return min_vertix, min_weight  # 최소 정점과 그 간선 리턴
 
 
 count = 1
