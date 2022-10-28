@@ -37,7 +37,28 @@ sum = 0  # 가중치를 저장할 변수공간
 select = [0]  # 방문처리
 
 
-def get_min_vertix(adj_mat, select, v):
+# def get_min_vertix(adj_mat, select, v):
+#     min_weight = 2147483648
+#     for s in select:  # select안의 정점들을 하나씩 꺼내서 인접정점 파악
+#         for e in adj_mat[s]:
+#             if e[1] in select:  # 해당 정점이 이미 방문됐다면
+#                 continue
+#             if e[0] < min_weight:
+#                 min_weight = e[0]
+#                 min_vertix = e[1]
+#     return min_vertix, min_weight
+# for i in range(v):
+#     if adj_mat[s][i] == 'x' or i in select:  # 선택한 정점으로의 길은 고려하지않음
+#         continue  # 해당경로로는 갈수 없음을 의미
+#     if adj_mat[s][i] < min_weight:
+#         min_weight = adj_mat[s][i]
+#         min_vertix = i
+# return min_vertix, min_weight  # 최소 정점과 그 간선 리턴
+
+
+count = 1
+while count < v:
+    # 최소간선을 갖는 정점 찾기
     min_weight = 2147483648
     for s in select:  # select안의 정점들을 하나씩 꺼내서 인접정점 파악
         for e in adj_mat[s]:
@@ -46,20 +67,7 @@ def get_min_vertix(adj_mat, select, v):
             if e[0] < min_weight:
                 min_weight = e[0]
                 min_vertix = e[1]
-    return min_vertix, min_weight
-    # for i in range(v):
-    #     if adj_mat[s][i] == 'x' or i in select:  # 선택한 정점으로의 길은 고려하지않음
-    #         continue  # 해당경로로는 갈수 없음을 의미
-    #     if adj_mat[s][i] < min_weight:
-    #         min_weight = adj_mat[s][i]
-    #         min_vertix = i
-    # return min_vertix, min_weight  # 최소 정점과 그 간선 리턴
-
-
-count = 1
-while count < v:
-    # 최소간선을 갖는 정점 찾기
-    min_vertix, min_weight = get_min_vertix(adj_mat, select, v)
+    #min_vertix, min_weight = get_min_vertix(adj_mat, select, v)
     select.append(min_vertix)  # 해당 정점 방문처리
     count += 1
     sum += min_weight  # 비용 누적
