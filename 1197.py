@@ -84,3 +84,7 @@ while count < v:
             # sum += min_weight  # 비용 누적
 
 print(sum)
+'''
+소요시간 1시간 30분
+풀이 참조 : https://hillier.tistory.com/54
+'''
