@@ -23,4 +23,5 @@ data.sort()  # 사전순으로 정렬하고, 길이순으로 재정렬
 data.sort(key=lambda x: len(x))  # key=lambda x 구문 뒤에 붙은 조건에 맞춰 정렬
 
 
-print(data)
+for i in data:
+    print(i, end=' ')
