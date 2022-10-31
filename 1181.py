@@ -10,3 +10,17 @@
 '''
 
 n = int(input())
+
+data = []
+
+for _ in range(n):
+    data.append(input())
+
+# 중복값 제거
+data = list(set(data))  # set은 중복과 순서를 허용하지않음
+
+data.sort()  # 사전순으로 정렬하고, 길이순으로 재정렬
+data.sort(key=lambda x: len(x))  # key=lambda x 구문 뒤에 붙은 조건에 맞춰 정렬
+
+
+print(data)
