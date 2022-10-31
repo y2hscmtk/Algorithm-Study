@@ -24,4 +24,4 @@ data.sort(key=lambda x: len(x))  # key=lambda x 구문 뒤에 붙은 조건에 �
 
 
 for i in data:
-    print(i, end=' ')
+    print(i)
