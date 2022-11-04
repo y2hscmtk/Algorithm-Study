@@ -1,6 +1,5 @@
 # https://www.acmicpc.net/problem/2606
 
-
 '''
 신종 바이러스인 웜 바이러스는 네트워크를 통해 전파된다. 
 한 컴퓨터가 웜 바이러스에 걸리면 그 컴퓨터와 네트워크 상에서 연결되어 있는 모든 컴퓨터는 웜 바이러스에 걸리게 된다.
@@ -12,6 +11,15 @@
 어느 날 1번 컴퓨터가 웜 바이러스에 걸렸다. 컴퓨터의 수와 네트워크 상에서 서로 연결되어 있는 정보가 주어질 때, 
 1번 컴퓨터를 통해 웜 바이러스에 걸리게 되는 컴퓨터의 수를 출력하는 프로그램을 작성하시오.
 
+7
+6
+1 2
+2 3
+1 5
+5 2
+5 6
+4 7
+
 '''
 '''
 아이디어 1
@@ -22,7 +30,37 @@
 '''
 
 
-v = int(input())  # 컴퓨터의 수 : 정점의 개수
-e = int(input())  # 연결되어 있는 쌍의 수 : 간선의 개수
-
+from collections import deque
 result = 0  # 바이러스에 감염된 컴퓨터의 수
+
+vertix = int(input())  # 컴퓨터의 수 : 정점의 개수
+edge = int(input())  # 연결되어 있는 쌍의 수 : 간선의 개수
+
+network = [[] for _ in range(vertix+1)]  # 정점의 개수만큼 생성
+visited = [False for _ in range(vertix+1)]  # 정점의 방문체크
+
+for i in range(edge):
+    start, end = map(int, input().split())  # 시작정점, 끝 정점 입력받고
+    network[start].append(end)  # 해당 정점정보 입력
+    network[end].append(start)  # 양방향으로~
+
+# 탐색 진행 : 큐를 활용하여 너비우선 탐색 진행
+queue = deque()  # 1번 정점의 간선들을 큐에 삽입
+for v in network[1]:
+    queue.append(v)
+
+# 너비 우선 탐색 큐에 담겨진 데이터가 없을때까지 진행
+while queue:
+    v = queue.popleft()  # 정점을 하나씩 뽑아가며 탐색
+    if visited[v]:  # 해당정점을 방문한 경우
+        continue  # 다음 정점을 뽑는다
+    # 해당 정점을 방문하지 않은 경우에 대하여
+    visited[v] = True  # 정점 방문처리
+    for c in network[v]:
+        queue.append(c)  # 해당 정점의 간선들 입력
+
+for visit in visited:
+    if visit:
+        result += 1
+
+print(result-1)
