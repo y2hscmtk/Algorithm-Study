@@ -31,7 +31,7 @@ for _ in range(m):
     graph[end].append(start)
 
 
-def bfs(graph, s):  # 깊이 우선 탐색으로 진행
+def bfs(graph, s):  # 너비 우선 탐색으로 진행
     global visited
     queue = deque()
     visited[s] = True  # 해당 정점 방문처리
