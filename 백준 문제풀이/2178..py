@@ -26,12 +26,11 @@ graph = []
 for i in range(n):
     graph.append(list(map(int, input())))  # n개의 줄에 m개의 요소를 각각 입력받아 삽입
 
-#count = 0
+count = 0
 
 
 def dfs(graph, start, end):
-    count = 0
-    d, s, w, a = 0, 0, 0, 0
+    global count
     global n, m
     if not ((0 <= start < n) and (0 <= end < m)):
         return count  # 해당 정점이 영역을 벗어난 경우
@@ -42,14 +41,15 @@ def dfs(graph, start, end):
     if graph[start][end] == 1:  # 해당 정점을 방문한적이 없다면
         graph[start][end] = 0  # 방문처리
         count += 1  # 방문한 정점 +1
-        d = dfs(graph, start, end+1)  # 오른쪽에 길이 있는지 탐색
-        s = dfs(graph, start+1, end)  # 아래쪽에 길이 있는지 탐색
-        w = dfs(graph, start-1, end)  # 위쪽에 길이 있는지 확인
-        a = dfs(graph, start, end-1)  # 왼쪽에 길이 있는지 확인
-    return count+d+s+w+a
+        dfs(graph, start, end+1)  # 오른쪽에 길이 있는지 탐색
+        dfs(graph, start+1, end)  # 아래쪽에 길이 있는지 탐색
+        dfs(graph, start-1, end)  # 위쪽에 길이 있는지 확인
+        dfs(graph, start, end-1)  # 왼쪽에 길이 있는지 확인
+    return count
 
-    # 깊이 우선 탐색을 진행하여 목적지에 도달하기까지 방문한 정점 탐색
-s, e = 0, 0
+# 깊이 우선 탐색을 진행하여 목적지에 도달하기까지 방문한 정점 탐색
+
+
 result = dfs(graph, 0, 0)
 
 print(result)
