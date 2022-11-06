@@ -47,9 +47,8 @@ def dfs(graph, start, end):
         dfs(graph, start, end-1)  # 왼쪽에 길이 있는지 확인
     return count
 
+
 # 깊이 우선 탐색을 진행하여 목적지에 도달하기까지 방문한 정점 탐색
-
-
 result = dfs(graph, 0, 0)
 
 print(result)
