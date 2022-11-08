@@ -27,3 +27,51 @@
 아이디어1
 서로 인접한 그룹의 개수가 몇개인지 그래프 탐색을 통해 파악하면 된다.
 '''
+
+
+from collections import deque
+t = int(input())
+
+
+def append_queue(queue, start, end):  # 인접한 정점들을 큐에 삽입하는 연산
+    queue.append([start+1, end])
+    queue.append([start, end+1])
+    queue.append([start-1, end])
+    queue.append([start, end-1])
+
+
+def bfs(data, start, end):
+    global m, n
+    data[start][end] = 0  # 방문처리
+    queue = deque()
+    append_queue(queue, start, end)
+    while queue:
+        node = queue.popleft()
+        s = node[0]
+        e = node[1]
+        if 0 <= s < n and 0 <= e < m:
+            if data[s][e] == 1:
+                data[s][e] = 0  # 방문처리
+                append_queue(queue, s, e)  # 인접 정점 삽입
+
+
+m, n, k = 0, 0, 0
+
+for _ in range(t):
+    # 가로길이M(1 ≤ M ≤ 50), 세로길이 N(1 ≤ N ≤ 50), 배추개수 K(1 ≤ K ≤ 2500)
+    group = 0
+    m, n, k = map(int, input().split())
+    data = []
+    for i in range(n):
+        data.append([])
+        data[i] = list(0 for _ in range(m))
+    for _ in range(k):  # 배추 삽입 연산
+        x, y = map(int, input().split())
+        data[y][x] = 1  # 배추가 있다는 의미
+    # 여기서부터 그룹 검사 => 정점들을 하나씩 뽑아가며 검사
+    for i in range(n):
+        for j in range(m):
+            if data[i][j] == 1:
+                group += 1  # 새로운 그룹을 발견했다는 의미
+                bfs(data, i, j)
+    print(group)
