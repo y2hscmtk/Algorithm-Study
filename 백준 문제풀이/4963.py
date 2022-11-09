@@ -5,11 +5,16 @@ from collections import deque
 w, h = 0, 0
 
 
-def append_queue(queue, start, end):  # 인접한 정점들 큐에 삽입
+def append_queue(queue, start, end):  # 인접한 정점들 큐에 삽입 => 수정 : 대각선 경로 추가
     queue.append([start+1, end])
     queue.append([start, end+1])
     queue.append([start-1, end])
     queue.append([start, end-1])
+    # 대각선 경로 추가
+    queue.append([start-1, end-1])
+    queue.append([start-1, end+1])
+    queue.append([start+1, end-1])
+    queue.append([start+1, end+1])
 
 
 def bfs(graph, start, end):
