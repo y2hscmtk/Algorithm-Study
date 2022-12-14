@@ -18,3 +18,32 @@ N명의 집단에서 각 사람의 덩치 등수는 자신보다 더 "큰 덩치
 '''
 
 n = int(input())
+
+# 공백을 기준으로 몸무게, 키의 정보를 저장
+data = [list(map(int, input().split())) for i in range(n)]
+
+# '덩치가 크다'의 정의
+# : A와 B를 기준으로 몸무게 A>B 이고 키 A>B를 둘 다 만족해야 A는 B보다 덩치가 크다고 말한다.
+# 둘 중 어느 하나라도 크지 않다면, 덩치를 비교할수 없다
+# 덩치 등수는 자신보다 덩치가 큰 사람의 수 + 1이 된다.
+
+# 덩치순서를 입력받은 순서대로 출력해야하므로, 정렬은 하지 않도록 한다.
+# 하나하나 비교하는 방식 시도
+
+grade_list = []  # 등수를 저장할 배열
+
+# n명의 사람에 대해 비교
+for i in range(n):
+    target = i  # 비교 대상자선택
+    grade = 1  # 자신보다 덩치가 큰 사람의 수+1이 타겟의 순위가 된다.
+    for c in range(n):
+        if c == target:
+            continue  # 자기자신과는 비교하지않음
+        # 타켓의 몸무게가 비교대상자의 몸무게보다 작고, 타겟의 키가 비교대상자의 키보다 작다면
+        if data[target][0] < data[c][0] and data[target][1] < data[c][1]:
+            grade += 1  # 자기자신보다 덩치가 크므로 등수를 +1한다.
+    grade_list.append(grade)  # 최종 결과를 저장한다.
+
+# 최종 결과 출력
+for grade in grade_list:
+    print(grade, end=' ')
