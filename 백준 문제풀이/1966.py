@@ -20,8 +20,6 @@ t = int(input())  # 테스트케이스의 횟수
 # 큐를 사용하기 위해 deque를 이용
 queue = deque()
 
-num = 0
-
 for _ in range(t):  # t번의 시행을 반복
     queue.clear()  # 큐 비우기
     # 공백을 기준으로 입력받을 데이터의 개수와, 인쇄 순번이 궁금한 문서의 인덱스 번호를 입력받는다.
