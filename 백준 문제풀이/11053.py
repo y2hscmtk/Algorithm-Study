@@ -10,27 +10,29 @@
 '''
 아이디어 : 입력받은 배열을 정렬시킨후 dp테이블에 값을 기록한다
 만약 dp 테이블에 같은 숫자가 존재한다면 해당 요소는 무시하고 다음 값부터 탐색한다.
+=> 배열을 정렬하여 값을 뽑는것이 아닌, 현재 존재하는 배열에서 부분 수열을 찾아야 하는것 따라서 정렬을 시키면 안된다.
+
 '''
+
+# 풀이 참고 https://foramonth.tistory.com/12
 
 n = int(input())
 
-# dp = [0]*(n+1)  # 최대 길이를 기록할 dp테이블
+dp = [0]*(n)  # 원본 배열의 해당 인덱스를 부분 배열의 요소로 삼을것인지 여부를 기록
 
-data_list = list(map(int, input().split()))
+dp[0] = 1
 
-last = 0  # 이전값을 저장할 변수
+data = list(map(int, input().split()))
 
-# 우선 값을 정렬하고
-data_list.sort()
+# 입력받은 data의 각 인덱스에서 dp값이 가장 큰 인덱스에 +1을 해주면 된다.
 
-count = 0  # 배열의 최대 길이를 저장할 변수
+for i in range(1, n):
+    for j in range(i):
+        # 만족해야 하는 조건
+        # 이전의 숫자들이 현재 숫자들보다 작은 숫자일것
+        # 이전 숫자들중 가장 큰 값까지 이뤄지는 수열일것
+        if data[j] < data[i] and dp[j] > dp[i]:
+            dp[i] = dp[j]  # dp값 업데이트
+    dp[i] += 1  # 현재 수까지 이어지는 수열을 작성해야 하므로 +1
 
-# 이전값을 넣어뒀다가 겹치지않는 새로운 값을 탐색할떄까지 반복
-for data in data_list:
-    if data == last:  # 이전에 기록한 숫자와 같다면
-        continue  # 다음수부터 탐색
-    else:  # 이전에 기록한 수와 같지 않다면
-        count += 1  # 부분순열의 길이를 증가시킨다.
-        last = data  # 현재 숫자를 기록한다.
-
-print(count)
+print(max(dp))  # dp에 기록된 수중 가장 큰 값이 최대 수열의 길이가 됨
