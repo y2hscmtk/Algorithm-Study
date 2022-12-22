@@ -11,3 +11,26 @@
 아이디어 : 입력받은 배열을 정렬시킨후 dp테이블에 값을 기록한다
 만약 dp 테이블에 같은 숫자가 존재한다면 해당 요소는 무시하고 다음 값부터 탐색한다.
 '''
+
+n = int(input())
+
+# dp = [0]*(n+1)  # 최대 길이를 기록할 dp테이블
+
+data_list = list(map(int, input().split()))
+
+last = 0  # 이전값을 저장할 변수
+
+# 우선 값을 정렬하고
+data_list.sort()
+
+count = 0  # 배열의 최대 길이를 저장할 변수
+
+# 이전값을 넣어뒀다가 겹치지않는 새로운 값을 탐색할떄까지 반복
+for data in data_list:
+    if data == last:  # 이전에 기록한 숫자와 같다면
+        continue  # 다음수부터 탐색
+    else:  # 이전에 기록한 수와 같지 않다면
+        count += 1  # 부분순열의 길이를 증가시킨다.
+        last = data  # 현재 숫자를 기록한다.
+
+print(count)
