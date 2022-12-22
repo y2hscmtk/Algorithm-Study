@@ -31,9 +31,9 @@ for _ in range(n):
 
 # 여기서 부터 알고리즘 수행
 # 아래 층수부터 점수의 최대값을 기록해 나아가야 하므로 바텀업(상향식) 방식을 사용한다.
-# 문제에서 주어진 조건을 통해 생각할 수 있는 점화식은 max(dp[n-4]+point[n-2]+point[n], dp[n-3]+point[n-1]+point[n])이 된다.
+# 문제에서 주어진 조건을 통해 생각할 수 있는 점화식은 max(dp[n-2], dp[n-3]+point[n-1])+point[n]이 된다.
 
-# 단 n-4의 값이 5보다 큰 경우에 한해서 위의 점화식을 사용할 수 있으므로 4이하의 경우는 그리디 알고리즘으로 최대값을 기록한다?
+# 위 점화식을 사용할수 없을정도로 수가 작은 경우는 별도로 최대값을 계산하여
 
 for i in range(n):
     if i == 0:  # 1층의 경우
@@ -42,8 +42,6 @@ for i in range(n):
         dp[i] = point[i-1] + point[i]
     elif i == 2:  # 3층의 경우
         dp[i] = max(point[i-2], point[i-1]) + point[i]  # 1층 3층 vs 2층 3층
-    elif i == 3:  # 4층의 경우
-        dp[i] = max(point[i-3]+point[i-1], point[i-3] + point[i-2]) + point[i]
-    else:  # 5층 이상의 경우
-        dp[i] = max(dp[i-4] + point[i-2], dp[i-3] + point[i-1]) + point[i]
+    else:  # 4층 이상의 경우
+        dp[i] = max(dp[i-2], dp[i-3] + point[i-1]) + point[i]
 print(dp[n-1])
