@@ -22,26 +22,43 @@
 길이 존재하는지에 대한 탐색은, BFS를 이용하여 길이 존재함을 확인하면 그 즉시 BFS를 종료한다.
 '''
 
-# n은 50보다 작은 자연수
-n = int(input())
+dict = {0: [10, 50], 2: [11], 1: [30, 30]}
 
-# n의 개수만큼 그래프안의 정점들이 존재하므로 그래프 생성
-graph = []*n
+dict2list = list(dict)
+print(dict2list)
 
-# 입력을 편하게 받기위한 임시그래프
-fgraph = []*n
+# # n은 50보다 작은 자연수
+# n = int(input())
 
-for i in range(n):
-    # 데이터 입력받기
-    data = list(map(str, input().split()))
-    # 두번째 데이터가 인접정점의 개수이므로
-    num = int(data[1])
-    # 인접정점의 개수에 따라 자신에게 향하는 데이터 삽입가능
-    if num == 0:
-        # A 0 과 같이 표현되는 경우는 정점만 삽입
-        fgraph.append(data[0])
-    else:
-        fgraph.append([data[0]])
-        fgraph[i].append([data[j] for j in range(2, num+2)])
-        print(fgraph[i])
-    print(fgraph)
+# # n의 개수만큼 그래프안의 정점들이 존재하므로 그래프 생성
+# graph = []
+
+# # 입력을 편하게 받기위한 임시그래프
+# fgraph = []
+
+# for i in range(n):
+#     # 데이터 입력받기
+#     data = list(map(str, input().split()))
+#     # 두번째 데이터가 인접정점의 개수이므로
+#     num = int(data[1])
+#     # 인접정점의 개수에 따라 자신에게 향하는 데이터 삽입가능
+#     if num == 0:
+#         # A 0 과 같이 표현되는 경우는 정점만 삽입
+#         fgraph.append(data[0])
+#     else:
+#         fgraph.append([data[0]])
+#         fgraph[i].append([data[j] for j in range(2, num+2)])
+#         print(fgraph[i])
+# print(fgraph)
+# # n개의 정점에 대하여
+# for i in range(n):
+#     for site in data[i][1]: # 'B' ,'C' ,'D'등의 데이터가 site에 담김
+#         for j in range(len(graph)):
+#             if site not in graph:
+#                 graph.append([site])
+#             else: # 이미 등록되어 있다면
+
+# 아래부터 graph에 알맞은 방향으로 fgraph를 수정하여 입력해야함
+# for node in fgraph:
+#     graph.append([node[0]])
+# print(graph)
