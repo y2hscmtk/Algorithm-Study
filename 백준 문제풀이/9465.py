@@ -17,51 +17,36 @@
 
 즉, 2n개의 스티커 중에서 점수의 합이 최대가 되면서 서로 변을 공유 하지 않는 스티커 집합을 구해야 한다.
 
-위의 그림의 경우에 점수가 50, 50, 100, 60인 스티커를 고르면, 점수는 260이 되고 이 것이 최대 점수이다. 
+위의 그림의 경우에 점수가 50, 50, 100, 60인 스티커를 고르면, 점수는 260이 되고 g이 것이 최대 점수이다. 
 
 가장 높은 점수를 가지는 두 스티커 (100과 70)은 변을 공유하기 때문에, 동시에 뗄 수 없다.
 '''
-
+# 테스트 케이스의 수
 t = int(input())
 
-for _ in range(t):
-    # 배열 입력받기
-    n = int(int(input()))
-    data = [0]*2
+for i in range(t):
+    n = int(input())
+    # 데이터 입력받기
+    data = []
     for j in range(2):
-        data[j] = list(map(int, input().split()))
+        data.append(list(map(int, input().split())))
 
     # 알고리즘 시작
 
-    # 테스트케이스에서 알수있듯이 앞의 수를 고르지 않음으로서 다음수를 더 크게 만들수 있는 경우를 고려해서 결정한다.
-    # 0번 dp에서는 둘 중 더 큰 값을 기록해두고, 1번 dp부터 앞의 수를 선택하지않고 고르는경우와, 그렇지 않은 경우를 비교하여 결정한다.
+    # 수를 저장할수 있는 방법은 다음과 같다
+    # a b c
+    # d e f
+    # 다음과 같이 수가 있는경우
+    # 왼쪽 위에서 시작할때 a -> e -> c 를 고르거나, 가운데 수를 고르지 않고 a -> _ -> f과 같이 고르는 경우 두가지 경우가 가능하다
+    # 이는 가운데 수를 고르지 않고 원래대로라면 고를 수 없는 수를 고르는 것이, 더 수가 커지는 경우이므로 두가지 경우에 대해 값을 기록한다
+    # 수식으로 표현하자면 첫번째 줄의 경우 data[0][2] = max(d,e) + c 와 같이 표현이 가능한것이다.
+    # 각각의 줄에 대해 수식을 표현하고 두가지 경우 중, 더 큰 값을 출력하도록 한다.
 
-    # dp테이블 작성
-    dp = [0]*(n+1)
-    last = 0  # 이전에 어떤 칸을 선택했는지 저장
-
-    for i in range(n):
-        # 0번째 dp의 경우 단순히 큰 값을 저장한다.
-        if i == 0:
-            if data[0][i] > data[1][i]:
-                last = 0
-                dp[0] = data[0][i]
-            else:
-                last = 1
-                dp[0] = data[1][i]
-        elif i == 1:
-            # 이번에 고를수 있는 번호를 고른 경우와 고를 수 없는 번호를 고를때의 경우를 고려하여 결정
-            if data[last][i-1] + data[1-last][i] >= data[1-last][i-1] + data[last][i]:
-                dp[1] = data[last][i-1] + data[1-last][i]
-                last = 1-last
-            else:
-                dp[1] = data[1-last][i-1] + data[last][i]
-        # i >= 2 부터는 이전의 카드를 고르지 않는것이 더 큰 수가 될수 있는 방법이 될 수도 있으므로 다른 알고리즘을 적용시킨다.
+    for j in range(1, n):
+        if j == 1:
+            data[0][j] += data[1][j - 1]
+            data[1][j] += data[0][j - 1]
         else:
-            # 이전에 카드를 고르지 않는것이 더 큰 수가 되는 방법일 경우
-            if dp[i-2] + data[last][i] > dp[i-1] + data[1-last][i]:
-                dp[i] = dp[i-2] + data[last][i]
-            else:
-                dp[i] = dp[i-1] + data[1-last][i]
-                last = 1-last
-    print(dp[n-1])
+            data[0][j] += max(data[1][j - 1], data[1][j - 2])
+            data[1][j] += max(data[0][j - 1], data[0][j - 2])
+    print(max(data[0][n - 1], data[1][n - 1]))
