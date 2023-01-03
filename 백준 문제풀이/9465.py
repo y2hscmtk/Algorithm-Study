@@ -21,3 +21,47 @@
 
 가장 높은 점수를 가지는 두 스티커 (100과 70)은 변을 공유하기 때문에, 동시에 뗄 수 없다.
 '''
+
+t = int(input())
+
+for _ in range(t):
+    # 배열 입력받기
+    n = int(int(input()))
+    data = [0]*2
+    for j in range(2):
+        data[j] = list(map(int, input().split()))
+
+    # 알고리즘 시작
+
+    # 테스트케이스에서 알수있듯이 앞의 수를 고르지 않음으로서 다음수를 더 크게 만들수 있는 경우를 고려해서 결정한다.
+    # 0번 dp에서는 둘 중 더 큰 값을 기록해두고, 1번 dp부터 앞의 수를 선택하지않고 고르는경우와, 그렇지 않은 경우를 비교하여 결정한다.
+
+    # dp테이블 작성
+    dp = [0]*(n+1)
+    last = 0  # 이전에 어떤 칸을 선택했는지 저장
+
+    for i in range(n):
+        # 0번째 dp의 경우 단순히 큰 값을 저장한다.
+        if i == 0:
+            if data[0][i] > data[1][i]:
+                last = 0
+                dp[0] = data[0][i]
+            else:
+                last = 1
+                dp[0] = data[1][i]
+        elif i == 1:
+            # 이번에 고를수 있는 번호를 고른 경우와 고를 수 없는 번호를 고를때의 경우를 고려하여 결정
+            if data[last][i-1] + data[1-last][i] >= data[1-last][i-1] + data[last][i]:
+                dp[1] = data[last][i-1] + data[1-last][i]
+                last = 1-last
+            else:
+                dp[1] = data[1-last][i-1] + data[last][i]
+        # i >= 2 부터는 이전의 카드를 고르지 않는것이 더 큰 수가 될수 있는 방법이 될 수도 있으므로 다른 알고리즘을 적용시킨다.
+        else:
+            # 이전에 카드를 고르지 않는것이 더 큰 수가 되는 방법일 경우
+            if dp[i-2] + data[last][i] > dp[i-1] + data[1-last][i]:
+                dp[i] = dp[i-2] + data[last][i]
+            else:
+                dp[i] = dp[i-1] + data[1-last][i]
+                last = 1-last
+    print(dp[n-1])
