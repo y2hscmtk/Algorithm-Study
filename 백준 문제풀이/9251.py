@@ -40,10 +40,10 @@ for i in range(len(arrayA)):
     for j in range(len(arrayB)):
         # 같은 값을 발견하였다면 LCS[i-1][j+1]+1의 값으로 초기화
         if arrayA[i] == arrayB[j]:
-            LCS[i+1][j+1] = LCS[i][j] + 1
+            LCS[j+1][i+1] = LCS[j][i] + 1
         # 같은 값이 아니라면 LCS[i-1][j] 와 LCS[i][j-1] 둘 중에 큰 값으로 값을 정한다.
         else:
-            LCS[i+1][j+1] = max(LCS[i][j+1], LCS[i+1][j])
+            LCS[j+1][i+1] = max(LCS[j][i+1], LCS[j+1][i])
 
 # 가장 긴 길이 결정
 maxLength = LCS[0][0]
