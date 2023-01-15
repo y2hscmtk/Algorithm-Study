@@ -40,6 +40,6 @@ def BFS():
 # BFS진행
 BFS()
 
-# 정답 출력
+# 각 노드의 부모 출력
 for i in range(2, n+1):
     print(parent[i])
