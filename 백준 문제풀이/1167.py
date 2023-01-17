@@ -15,5 +15,59 @@
 
 각 줄의 마지막에는 -1이 입력으로 주어진다. 주어지는 거리는 모두 10,000 이하의 자연수이다.
 '''
+import sys
+# 재귀 최대허용치 설정
+sys.setrecursionlimit(10000)
 
+# 정점의 개수
 v = int(input())
+
+# 간선정보를 저장할 트리
+tree = [[] for i in range(v+1)]
+
+# 간선정보 입력받기
+for i in range(v):
+    # 간선정보 입력받기
+    data = list(map(int, input().split()))
+    # 정점번호, 다른 정점, 두 정점사이의 거리
+    # -1이 아니면 data[0]와 연결된 간선 정보에 해당된다.
+    # 간선정보 저장
+    j = 1
+    while data[j] != -1:
+        tree[data[0]].append([data[j], data[j+1]])
+        j += 2
+
+# 트리 지름 구하기 알고리즘 시작
+# 1. 시작 정점에서 가장 멀리 떨어진 정점 x 찾기
+# 2. 정점 x에서 가장 멀리 떨어진 정점 y 찾기
+# 3. x에서 y까지의 거리가 트리의 지름에 해당됨
+
+# DFS을 통해 위의 과정을 수행함
+
+
+def DFS(start, d):
+    # 인접정점을 기준으로 깊이우선 탐색
+    for node, cost in tree[start]:
+        # 아직 방문한적 없는 정점에 한해서 방문
+        if distance[node] == -1:
+            # 길이를 누적시켜 저장
+            distance[node] = d + cost
+            # 길이를 누적시켜 DFS
+            DFS(node, d+cost)
+
+
+# 시작정점에서의 거리를 기록할 배열
+distance = [-1]*(v+1)
+distance[1] = 0  # 1~1까지의 거리 : 0
+# 1. 시작 정점에서 가장 멀리 떨어진 정점 x 찾기
+DFS(1, 0)
+
+# 시작 정점에서 가장 멀리 떨어진 정점의 인덱스(번호)
+x = distance.index(max(distance))
+distance = [-1]*(v+1)  # 새로이 거리를 측정하기 위해 초기화
+distance[x] = 0  # x~x까지의 거리 : 0
+# 2. x에서 가장 멀리 떨어진 정점 y 찾기
+DFS(x, 0)
+
+# x에서 가장 멀리떨어진 정점 y 까지의 거리가 트리의 지름이 됨
+print(max(distance))
