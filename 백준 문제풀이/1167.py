@@ -18,7 +18,6 @@
 import sys
 # 재귀 최대허용치 설정
 sys.setrecursionlimit(10000)
-
 # 정점의 개수
 v = int(input())
 
