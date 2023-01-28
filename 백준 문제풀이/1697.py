@@ -23,3 +23,32 @@
 이동가능한 인접 정점으로는 x-1,x+1,2*x이다.
 dp테이블을 만들어서, 수빈이의 좌표와 동생의 좌표가 일치하게 되는 시점의 dp값을 출력하도록 하면 될것같다.
 '''
+from collections import deque
+n, k = map(int, input().split())
+
+dp = [-1]*100001  # 방문정보와 시간을 누적시켜 기록할 배열
+
+# 탐색을 시작하는 위치 큐에 삽입
+queue = deque()
+queue.append(n)
+
+
+# bfs
+def bfs(n):
+    global dp, k, queue
+    dp[n] = 0  # 시작위치 방문처리
+    while queue:  # 큐가 존재하는동안 탐색 지속
+        x = queue.popleft()
+        # 수빈이의 현재 위치가 동생의 좌표와 같아진다면 탐색 종료
+        if x == k:
+            return dp[x]  # 몇초가 걸렸는지 출력
+        # 3가지 방향에 대해 탐색
+        for nx in (x-1, x+1, 2*x):
+            # 영역을 벗어나지 않는 선에서, 아직 값이 기록되지 않은경우 업데이트
+            if 0 <= nx <= 100000:
+                if dp[nx] == -1:
+                    dp[nx] = dp[x] + 1
+                    queue.append(nx)  # 해당좌표 큐에 삽입
+
+
+print(bfs(n))
