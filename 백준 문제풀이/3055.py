@@ -17,10 +17,6 @@ r, c = map(int, input().split())
 graph = [list(input()) for _ in range(r)]
 # 고슴도치(S), 홍수(*), 비버(D), 돌(X)
 
-# # 홍수의 초기위치 지정 => 홍수가 입력되지 않을수 있으므로 초기값을 -1로 지정
-# flood_x, flood_y = -1, -1
-check = False
-
 # 홍수의 위치를 저장할 배열
 flood_array = []
 
@@ -33,7 +29,6 @@ for i in range(r):
         elif graph[i][j] == '*':
             # 홍수 초기위치 지정
             flood_array.append([i, j])
-            check = True
         elif graph[i][j] == 'D':
             # 목적지 지정
             result_x, result_y = i, j
@@ -42,16 +37,15 @@ for i in range(r):
 # 순서에 유의하여 큐에 삽입
 queue = deque()
 
-# 홍수값이 존재한다면 삽입, 그렇지않다면 삽입x
-if check:
-    # 홍수에 대한 방문정보를 저장하기 위한 배열 생성
-    flooded = [[False]*c for _ in range(r)]
-    # 홍수배열에서 데이터를 뽑아서 저장
-    for flood_x, flood_y in flood_array:
-        flooded[flood_x][flood_y] = True  # 홍수의 시작위치는 침수되어 있어야함
-        # 홍수가 먼저 탐색을 진행할수 있도록 먼저 삽입
-        # 세번째 인자로 True와 False를 줘서 True이면 홍수의 움직임을 의미하도록 함
-        queue.append([flood_x, flood_y, True])
+
+# 홍수에 대한 방문정보를 저장하기 위한 배열 생성
+flooded = [[False]*c for _ in range(r)]
+# 홍수배열에서 데이터를 뽑아서 저장
+for flood_x, flood_y in flood_array:
+    flooded[flood_x][flood_y] = True  # 홍수의 시작위치는 침수되어 있어야함
+    # 홍수가 먼저 탐색을 진행할수 있도록 먼저 삽입
+    # 세번째 인자로 True와 False를 줘서 True이면 홍수의 움직임을 의미하도록 함
+    queue.append([flood_x, flood_y, True])
 # # 고슴도치에 대한 방문정보를 저장하기 위한 배열 => 시간을 누적시켜 저장함
 visited = [[-1]*c for _ in range(r)]
 visited[hedgehog_x][hedgehog_y] = 0  # 시작위치는 방문처리 시작위치에 도달하는데 걸린 시간 0초
@@ -93,16 +87,10 @@ def bfs(queue):
                         return visited[x][y]  # 방문하는데 걸린 시간 리턴
                     # 고슴도치는 침수될지역(침수된지역)으로 이동하지 못하고, 돌을 통과하지못함
                     # 또한 방문하지 않은 지역에 한해서 방문해야함
-                    if check:
-                        if not flooded[nx][ny] and visited[nx][ny] == -1:  # 아직 방문하지 않은 지역에 한해서
-                            visited[nx][ny] = visited[x][y] + 1
-                            # 움직이는 대상이 두더지임을 큐에 삽입
-                            queue.append([nx, ny, False])
-                    else:
-                        if visited[nx][ny] == -1:  # 아직 방문하지 않은 지역에 한해서
-                            visited[nx][ny] = visited[x][y] + 1
-                            # 움직이는 대상이 두더지임을 큐에 삽입
-                            queue.append([nx, ny, False])
+                    if not flooded[nx][ny] and visited[nx][ny] == -1:  # 아직 방문하지 않은 지역에 한해서
+                        visited[nx][ny] = visited[x][y] + 1
+                        # 움직이는 대상이 두더지임을 큐에 삽입
+                        queue.append([nx, ny, False])
     # 비버가 도착하지 못한채 bfs가 종료되면 KAKTUS 리턴
     return "KAKTUS"
 
