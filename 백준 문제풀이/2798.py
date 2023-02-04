@@ -1,17 +1,17 @@
-# https://www.acmicpc.net/problem/2798
+from itertools import combinations
 
-'''
-N장의 카드에 써져 있는 숫자가 주어졌을 때, M을 넘지 않으면서 M에 최대한 가까운 카드 3장의 합을 구해 출력하시오.
+n, m = map(int, input().split())
+# 카드 데이터 입력받기
+card = list(map(int, input().split()))
+# m을 넘지 않으면서 m에 최대한 가까운 카드 3장의 합을 출력한다.
+result = -1  # 정답을 저장할 변수
 
-입력
-첫째 줄에 카드의 개수 N(3 ≤ N ≤ 100)과 M(10 ≤ M ≤ 300,000)이 주어진다. 
-둘째 줄에는 카드에 쓰여 있는 수가 주어지며, 이 값은 100,000을 넘지 않는 양의 정수이다.
-합이 M을 넘지 않는 카드 3장을 찾을 수 있는 경우만 입력으로 주어진다.
+# m에 최대한 가까운 카드 3장의 합, 경우의 수 모두 따져보기
+for x, y, z in combinations(card, 3):
+    card_sum = x+y+z  # 조합에서 생성된 카드의 합 계산
+    if card_sum > m:  # 카드의 합이 더 크다면 무시
+        continue
+    else:
+        result = max(result, card_sum)  # 더 큰 값으로 갱신
 
-출력
-첫째 줄에 M을 넘지 않으면서 M에 최대한 가까운 카드 3장의 합을 출력한다.
-'''
-'''
-아이디어 : 콤비네이션을 이용하여 배열중에서 3개를 고르고, M을 넘지않으면서 큰값을 갱신한다.
-모든 경우에 대해(브루트포스) 위 과정을 반복한다.
-'''
+print(result)
