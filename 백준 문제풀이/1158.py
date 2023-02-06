@@ -11,3 +11,28 @@
 
 N과 K가 주어지면 (N, K)-요세푸스 순열을 구하는 프로그램을 작성하시오.
 '''
+from collections import deque
+
+# n명, k번째 사람 제거
+n, k = map(int, input().split())
+
+# n명의 사람을 원탁에 앉게 한다.
+queue = deque(list(i for i in range(1, n+1)))
+
+result = []  # 정답을 저장할 배열
+
+# 원탁에 사람이 다 비워질때까지 알고리즘 수행
+while queue:
+    # k번째 사람 전까지 큐에서 사람을 뽑아 맨뒤로 순번을 넘긴다.
+    for _ in range(k-1):
+        # k번째 사람이 필요한것이므로, 그전의 사람들은 무시한다.
+        queue.append(queue.popleft())
+    result.append(queue.popleft())  # k번째 사람을 큐에서 제거하고, result배열에 삽입한다.
+
+# 알고리즘 종료 후 정답 출력
+print('<', end='')
+for i in range(n):
+    if i == n-1:  # 마지막번호는 >로 마무리
+        print(result[i], end='>')
+    else:
+        print(result[i], end=', ')
