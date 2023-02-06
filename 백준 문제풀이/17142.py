@@ -99,4 +99,4 @@ for spot in combinations(virusPosition, m):
         result = min(result, time)
 
 
-print(result if result != sys.maxsize else -1)
+print(result if result == sys.maxsize else -1)
