@@ -26,39 +26,46 @@ for i in range(t):
     # 입력받을 데이터의 수
     n = int(input())
     # 입력받을 데이터
-    data = input()
-    # 데이터 분할
-    data = data.replace('[', ',').replace(']', ',')
-    # ,를 기준으로 단어 나누기
-    data = data.split(',')
+    # 앞뒤의 []은 무시하고 데이터만 입력받음, strip을 이용하여 1이전(0)과 -1번째 값을 지움
+    # 이후 ','을 기준으로 나누기
+    data = deque(input().strip()[1:-1].split(','))
+
+    # 단어의 개수가 0개일경우 비어있는 덱으로 전환
+    if n == 0:
+        data = deque()
+
     # 에러 없이 명령이 수행됐는지 확인하기 위해서
     error = False
-    # 알고리즘 수행
+    # 홀수번 reverse명령이 있을때만 뒤집기 명령을 수행하기 위함
+    reverse = False
+
+    # 명령 수행
     for command in commands:
         # 뒤집기 명령
         if command == 'R':
-            data.reverse()
+            # 기존 reverse명령이 True라면 False로, 아니면 True로 바꾼다.
+            reverse = False if reverse else True
         # 첫번째 단어 제거 명령
         elif command == 'D':
-            # 제거할 단어가 없다면 error출력하고 다음 명령 입력받기
-            if data[1] == '':
-                print('error')
-            # if len(data) == 2:
-            #     print('error')
-                error = True  # 에러발생 처리
-                break
+            # 제거할 단어가 덱에 남아있는 상태일때만 명령 수행
+            if data:
+                # reverse명령이 있는 상태라면 오른쪽 끝 값을 제거해야함
+                if reverse:
+                    data.pop()
+            # reverse명령이 없는 상태라면 왼쪽 끝 값을 제거해야함
+                else:
+                    data.popleft()
+            # 제거할 단어가 없는상태라면 반복 종료후 error출력
             else:
-                # 제거할 단어가 남아있다면 제거
-                del data[1]
-
+                print('error')
+                error = True  # 에러발생 확인
+                break
     # 에러가 있었다면 결과출력없이 다음 테스트케이스로 넘어가기
     if error:
         continue
-    # 단어 출력하기
-    print('[', end='')
-    for j in range(1, len(data)-1):
-        if j == len(data)-2:
-            print(data[j], end='')
-        else:
-            print(data[j], end=',')
-    print(']')
+    # 최종적으로 reverse명령이 홀수번 있었는지 확인하여 배열 뒤집기
+    if reverse:
+        data.reverse()
+    # 최종 결과 출력
+    # data문자열 사이에 join을 이용하여 ,를 삽입 ','.join(리스트)
+    print("["+",".join(data)+"]")
