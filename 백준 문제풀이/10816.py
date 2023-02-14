@@ -19,31 +19,41 @@ n.sort()  # 이진탐색을 위해 정렬
 m_length = int(input())
 m = list(map(int, input().split()))
 
+# 참고한 사이트
+# https://soooprmx.com/bisect-%EC%9D%B4%EC%A7%84%ED%83%90%EC%83%89-%EC%95%8C%EA%B3%A0%EB%A6%AC%EB%93%AC/
+# https://hongcoding.tistory.com/12
+
+
+# 파이썬 라이브러리 bisect를 문제상황에 맞도록 구현
+# 일치하는 데이터가 많을 경우, 가장 왼쪽 인덱스를 리턴함
+def bisect_left(card):
+    start, end = 0, n_length
+    while start < end:
+        mid = (start+end)//2
+        if n[mid] < card:  # card가 오른쪽 영역에 존재하면
+            start = mid + 1  # 탐색 시작범위를 mid 이후로
+        else:  # 왼쪽영역에 카드가 존재하거나, mid위치에 카드가 존재한다면
+            end = mid  # 탐색 끝범위를 mid까지로
+    # start == end면 탐색성공, start>end면 탐색 실패
+    return start
+
+
+# 일치하는 데이터가 많을 경우, 가장 오른쪽 인덱스를 리턴함
+def bisect_right(card):
+    start, end = 0, n_length
+    while start < end:
+        mid = (start+end)//2
+        if n[mid] > card:  # card가 리스트 왼쪽 영역에 존재하면
+            end = mid  # 탐색 끝범위를
+        else:  # 오른쪽 영역에 card가 존재하거나, mid위치에 card가 존재한다면
+            start = mid+1  # 탐색 시작 범위를 mid부터로
+    # start == end면 탐색성공, start>end면 탐색 실패
+    return start
+
 
 # 이분 탐색을 진행하다 원하는 데이터를 찾으면 해당 인덱스를 기준으로 앞뒤로 카운팅하여 출력(같은 숫자의 경우 앞뒤에 배치되어 있을것)
 # 결과 출력
 for card in m:
-    start, end = 0, n_length-1
-    count = 0
-    while start <= end:  # 다음 조건을 만족하는동안 탐색
-        middle = (int)((start+end)/2)  # 중간값 파악
-        if card < n[middle]:  # 탐색하고자 하는 값이 중간값보다 작다면
-            end = middle - 1  # 끝점의 범위를 좁혀서 왼쪽에서 탐색
-        elif card > n[middle]:  # 탐색하고자 하는 값이 중간값보다 크다면
-            start = middle + 1  # 시작점의 범위를 앞으로 당겨서 오른쪽에서 탐색
-        else:  # 원하는 값을 찾았을때
-            # 해당 인덱스를 기준으로 앞뒤로 몇개나 있는지 판정
-            count = 1
-            for i in range(middle-1, -1, -1):
-                if n[i] != card:
-                    break
-                count += 1
-            for j in range(middle+1, n_length):
-                if n[j] != card:
-                    break
-                count += 1
-            print(count, end=' ')
-            break
-    if count != 0:
-        continue
-    print(0, end=' ')
+    left_index = bisect_left(card)
+    right_index = bisect_right(card)
+    print(right_index-left_index, end=' ')
