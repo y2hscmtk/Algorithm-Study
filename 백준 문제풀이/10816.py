@@ -1,43 +1,49 @@
 # https://www.acmicpc.net/problem/10816
 
 '''
-N개의 정수 들중에 X라는 정수가 존재하는지 맞추기
+숫자 카드는 정수 하나가 적혀져 있는 카드이다. 
+상근이는 숫자 카드 N개를 가지고 있다. 
+정수 M개가 주어졌을 때, 이 수가 적혀있는 숫자 카드를 상근이가 몇 개 가지고 있는지 구하는 프로그램을 작성하시오.
 
-n개의 자연수가 주어지고, m개의 자연수들이 주어진다. 
-n개의 자연수로 이루어진 배열에 m개의 자연수가 존재하는지 탐색한다.
+첫째 줄에 상근이가 가지고 있는 숫자 카드의 개수 N(1 ≤ N ≤ 500,000)이 주어진다. 
+둘째 줄에는 숫자 카드에 적혀있는 정수가 주어진다. 
+숫자 카드에 적혀있는 수는 -10,000,000보다 크거나 같고, 10,000,000보다 작거나 같다.
 
-M(1 ≤ M ≤ 100,000)
+셋째 줄에는 M(1 ≤ M ≤ 500,000)이 주어진다. 
+넷째 줄에는 상근이가 몇 개 가지고 있는 숫자 카드인지 구해야 할 M개의 정수가 주어지며, 이 수는 공백으로 구분되어져 있다. 
+이 수도 -10,000,000보다 크거나 같고, 10,000,000보다 작거나 같다.
 '''
-
-'''
-아이디어1 : 배열을 입력받고, 배열을 오름차순으로 정렬시킨후, 이진탐색을 통해 m개의 자연수들을 탐색하면 될듯하다.
-'''
-
-n = int(input())
-array = list(map(int, input().split()))  # 배열의 형태로 공백으로 분리하여 자연수를 입력받기
-
-array.sort()  # 이진탐색을 위해 배열 오름차순 정렬
-
-m = int(input())
-num = list(map(int, input().split()))  # 탐색에 대입하기 위한 숫자 배열
+n_length = int(input())
+n = list(map(int, input().split()))
+n.sort()  # 이진탐색을 위해 정렬
+m_length = int(input())
+m = list(map(int, input().split()))
 
 
-# 이진탐색 함수 정의
-def binary_search(list, start, end, n):  # 배열, 시작노드, 끝노드
+# 이분 탐색을 진행하다 원하는 데이터를 찾으면 해당 인덱스를 기준으로 앞뒤로 카운팅하여 출력(같은 숫자의 경우 앞뒤에 배치되어 있을것)
+# 결과 출력
+for card in m:
+    start, end = 0, n_length-1
+    count = 0
     while start <= end:  # 다음 조건을 만족하는동안 탐색
         middle = (int)((start+end)/2)  # 중간값 파악
-        if n < list[middle]:  # 탐색하고자 하는 값이 중간값보다 작다면
+        if card < n[middle]:  # 탐색하고자 하는 값이 중간값보다 작다면
             end = middle - 1  # 끝점의 범위를 좁혀서 왼쪽에서 탐색
-        elif n > list[middle]:  # 탐색하고자 하는 값이 중간값보다 크다면
+        elif card > n[middle]:  # 탐색하고자 하는 값이 중간값보다 크다면
             start = middle + 1  # 시작점의 범위를 앞으로 당겨서 오른쪽에서 탐색
         else:  # 원하는 값을 찾았을때
-            return True  # 탐색이 성공했음을 리턴함
-    return False  # 탐색이 실패했음을 알림(리턴없이 반복문에서 탈출)
-
-
-# 결과 출력
-for key in num:
-    if binary_search(array, 0, n-1, key):
-        print(1)  # 탐색 성공시 1
-    else:
-        print(0)  # 실패시 1
+            # 해당 인덱스를 기준으로 앞뒤로 몇개나 있는지 판정
+            count = 1
+            for i in range(middle-1, -1, -1):
+                if n[i] != card:
+                    break
+                count += 1
+            for j in range(middle+1, n_length):
+                if n[j] != card:
+                    break
+                count += 1
+            print(count, end=' ')
+            break
+    if count != 0:
+        continue
+    print(0, end=' ')
