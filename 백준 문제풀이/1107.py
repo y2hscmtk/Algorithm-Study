@@ -33,7 +33,7 @@ if m != 0:
 # 현재 채널에서 + 혹은 -만 사용하여 이동하는 경우
 min_count = abs(100 - n)
 
-for nums in range(9999, 1000001):
+for nums in range(1000001):
     nums = str(nums)
     for j in range(len(nums)):
         # 각 숫자가 고장났는지 확인 후, 고장 났으면 break
