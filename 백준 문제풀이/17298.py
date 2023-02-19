@@ -7,3 +7,17 @@ Ai의 오큰수는 오른쪽에 있으면서 Ai보다 큰 수 중에서 가장 �
 예를 들어, A = [3, 5, 2, 7]인 경우 NGE(1) = 5, NGE(2) = 7, NGE(3) = 7, NGE(4) = -1이다. 
 A = [9, 5, 4, 8]인 경우에는 NGE(1) = -1, NGE(2) = 8, NGE(3) = 8, NGE(4) = -1이다.
 '''
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+data = list(map(int, input().split()))
+
+for i in range(n):
+    num = data[i]
+    nge = -1
+    for j in range(i+1, n):
+        if data[j] > data[i]:
+            nge = data[j]
+            break
+    print(nge, end=' ')
