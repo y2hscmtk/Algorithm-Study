@@ -7,17 +7,30 @@ Ai의 오큰수는 오른쪽에 있으면서 Ai보다 큰 수 중에서 가장 �
 예를 들어, A = [3, 5, 2, 7]인 경우 NGE(1) = 5, NGE(2) = 7, NGE(3) = 7, NGE(4) = -1이다. 
 A = [9, 5, 4, 8]인 경우에는 NGE(1) = -1, NGE(2) = 8, NGE(3) = 8, NGE(4) = -1이다.
 '''
-import sys
-input = sys.stdin.readline
+'''
+기존 풀이는 O(n^2)의 시간 복잡도를 가지므로, O(n)의 시간복잡도로 해결해야함
 
+오큰수를 기록할 배열을 만들고 값을 모두 -1로 초기화해둔다.
+배열에서 데이터를 하나씩 꺼내 기존에 스택에 들어가있는 값과 비교하여, 스택의 값보다 크다면 스택에서 데이터를 팝한다.
+이후 해당 인덱스의 값을 변경해서 오큰수를 기록한다.
+풀이 참조
+https://hongcoding.tistory.com/40
+'''
 n = int(input())
 data = list(map(int, input().split()))
 
-for i in range(n):
-    num = data[i]
-    nge = -1
-    for j in range(i+1, n):
-        if data[j] > data[i]:
-            nge = data[j]
-            break
-    print(nge, end=' ')
+stack = [0]  # 알고리즘에 사용할 스택, 첫번째 값은 미리 스택에 넣어둔다.
+
+nge = [-1]*n
+
+# 인덱스를 스택에 삽입할것임
+for i in range(1, n):
+    # 스택에 데이터가 존재하면서, 스택의 가장 위에있는값이 현재 삽입하려는 데이터보다 작은값이라면
+    # 스택의 가장위의 값은 stack[-1]로 표현가능
+    while stack and data[stack[-1]] < data[i]:
+        # 오큰수 기록
+        nge[stack.pop()] = data[i]  # 이후에 삽입하려는 데이터가 더 크다면 해당수는 오큰수가 됨
+    stack.append(i)  # 이후 i번째 인덱스 삽입
+
+# 배열 출력시 *을 이용하면 공백을 기준으로 출력됨
+print(*nge)
