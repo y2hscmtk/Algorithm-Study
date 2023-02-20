@@ -18,80 +18,75 @@
 '''
 2중 반복문을 통해 각 원소별로 돌아가면서 바둑판의 왼쪽 위 점을 정한후, 해당 점을 기준으로 8x8 영역이 되는 지점을 정해서
 해당 영역안에서 뒤집기 알고리즘을 진행, 선정된 바둑판을 기준으로 2중반복문으로 상하좌우를 검사해서 모양이 모두 맞는지 확인하고 뒤집게 된다면
-뒤집고, 횟수를 증가시킨다.
+뒤집고, 횟수를 증가시킨다. => 오답처리
+'''
+'''
+두번째 전략 : 왼쪽위가 하얀색으로 시작하는 바둑판과, 검은색으로 시작하는 바둑판 두가지를 미리 만들어놓고
+좌표별로 두가지 경우를 모두 비교해서 최소값을 찾아내는 방법
 '''
 import sys
-import copy
 n, m = map(int, input().split())
 
 board = [list(input()) for _ in range(n)]
 
 result = sys.maxsize  # 최소횟수를 기록하기위한 변수
 
+# 왼쪽위가 하얀색으로 시작하는 보드판
+white = ["WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW", ]
 
-# 방향벡터
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+# 왼쪽위가 검은색으로 시작하는 보드판
+black = ["BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB",
+         "BWBWBWBW",
+         "WBWBWBWB"]
+
+
+def white_board(i, j):
+    # 해당 좌표를 기점으로 8x8공간의 배열의 값과 하얀색 보드판과 비교한다
+    # 만약 값이 다르다면 count를 증가시킨다.
+    count = 0
+    for x in range(8):
+        for y in range(8):
+            if board[i+x][j+y] != white[x][y]:
+                count += 1
+    return count
+
+
+def black_board(i, j):
+    # 해당 좌표를 기점으로 8x8공간의 배열의 값과 하얀색 보드판과 비교한다
+    # 만약 값이 다르다면 count를 증가시킨다.
+    count = 0
+    for x in range(8):
+        for y in range(8):
+            if board[i+x][j+y] != black[x][y]:
+                count += 1
+    return count
 
 
 # 배열의 각 좌표별로 탐색
 # 8x8크기로 자르기위해, 영역에서 벗아나는 지점은 고려하지않음
-for i in range(n-7):
-    for j in range(m-7):
+for i in range(n):
+    for j in range(m):
 
-        # 영역을 벗어나지않는다면 바둑판의 영역 지정
-        board_n, board_m = i+8, j+8
+        # 영역에서 벗어나면 다음좌표부터 진행
+        if i+7 >= n or j+7 >= m:
+            continue
 
-        # 선택한 좌표를 기준으로 상하좌우 검사
-
-        # 자기자신을 뒤집는 경우와, 자신의 주위를 뒤집는 경우중 최소값을 가려봐야함
-        for l in range(2):
-            # 원본바둑판 복사
-            copy_board = copy.deepcopy(board)
-            # 방문정보 초기화
-            # 해당 좌표를 탐색하였는지여부를 기록하기 위한 배열
-            visit = [[False]*m for _ in range(n)]
-            if l == 0:
-                count = 0  # 뒤집기 최소횟수 초기화
-                for x in range(i, board_n):
-                    for y in range(j, board_m):
-                        # 체크대상
-                        change = "W" if copy_board[x][y] == "B" else "B"
-                        # 네 방향 탐색용
-                        for k in range(4):
-                            nx = x + dx[k]
-                            ny = y + dy[k]
-                            # 영역을 벗어나지 않는지 확인
-                            if i <= nx < board_n and j <= ny < board_m:
-                                # 모양이 같고, 한번도 안뒤집은 좌표라면(중복 뒤집기 방지)
-                                if copy_board[nx][ny] == copy_board[x][y] and not visit[nx][ny]:
-                                    copy_board[nx][ny] = change  # 뒤집기
-                                    visit[nx][ny] = True  # 뒤집기 처리
-                                    count += 1  # 뒤집기 횟수 증가
-                # 탐색 종료후 count 최소횟수로 갱신
-                result = min(result, count)
-            else:
-                # 바둑판 뒤집기 시작
-                # 자기 자신을 뒤집고 시작
-                copy_board[i][j] = "W" if copy_board[i][j] == "B" else "W"
-                count = 1  # 뒤집기 최소횟수 초기화
-                for x in range(i, board_n):
-                    for y in range(j, board_m):
-                        # 체크대상
-                        change = "W" if copy_board[x][y] == "B" else "B"
-                        # 네 방향 탐색용
-                        for k in range(4):
-                            nx = x + dx[k]
-                            ny = y + dy[k]
-                            # 영역을 벗어나지 않는지 확인
-                            if i <= nx < board_n and j <= ny < board_m:
-                                # 모양이 같고, 한번도 안뒤집은 좌표라면(중복 뒤집기 방지)
-                                if copy_board[nx][ny] == copy_board[x][y] and not visit[nx][ny]:
-                                    copy_board[nx][ny] = change  # 뒤집기
-                                    visit[nx][ny] = True  # 뒤집기 처리
-                                    count += 1  # 뒤집기 횟수 증가
-                # 탐색 종료후 count 최소횟수로 갱신
-            result = min(result, count)
-
+        # 영역을 벗어나지않는다면 해당 좌표를 대상으로 왼쪽위가 하얀바둑판을 만들때와
+        # 검은 바둑판을 만들때 두가지 경우를 검사하여 둘 중 최소값을 해당 좌표에 대한 최소값으로 지정
+        # 이후 기존 최솟값과 비교하여 갱신한다.
+        temp = min(white_board(i, j), black_board(i, j))
+        result = min(result, temp)
 
 print(result)
