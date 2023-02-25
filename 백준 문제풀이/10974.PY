@@ -10,3 +10,12 @@ N이 주어졌을 때, 1부터 N까지의 수로 이루어진 순열을 사전�
 출력
 첫째 줄부터 N!개의 줄에 걸쳐서 모든 순열을 사전순으로 출력한다.
 '''
+from itertools import permutations
+
+n = int(input())
+
+# 숫자 배열 만들어 두기
+numbers = [i for i in range(1, n+1)]
+
+for array in permutations(numbers, n):
+    print(*array)
