@@ -26,3 +26,26 @@
 3. 일치한다면 탐색하고자하는 문자열의 길이만큼 차례로 팝해서 문자가 모두 일치하는지 확인
 위 과정을 더 이상 일치하지 않을때까지 반복하면됨
 '''
+import sys
+words = input()
+search = input()
+
+length = len(search)
+
+stack = []
+# 문자를 차례로 스택에 삽입
+for i in range(len(words)):
+    # 스택에 문자열 삽입
+    stack.append(words[i])
+    if words[i] == search[-1]:
+        if ''.join(stack[-length:]) == search:
+            del stack[-length:]
+
+
+if len(stack) == 0:
+    print("FRULA")
+    sys.exit(0)
+
+# 반복이 종료된 이후, 스택의 단어를 차례로 출력하면됨
+for word in stack:
+    print(word, end='')
