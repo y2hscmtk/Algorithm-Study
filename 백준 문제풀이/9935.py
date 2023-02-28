@@ -17,3 +17,34 @@
 해당 문자를 기준으로 다시 찾고자 하는 문자열과 일치하는지 검사하여 del 명령으로 일치하는 문자를 지운후 다음 문자부터 반복한다.
 반복이 종료된 이후, 문자열의 길이를 확인하여 남아있는 문자가 없다면 FRULA를 출력하고. 남아있는 문자가 있다면 해당 문자를 출력한다
 '''
+# 원본 문자열
+words = list(input())
+# 폭발시킬 문자열
+search = list(input())
+
+i = 0
+while i != len(words):
+    index = 0
+    flag = True
+    if words[i] == search[index]:
+        index += 1
+        s = i  # 시작 인덱스
+        correct = True
+        for j in range(i+1, i+len(search)):
+            if words[j] == search[index]:
+                index += 1
+            else:
+                correct = False
+                break
+        if correct:  # 문자열이 일치한다면
+            del words[s:j+1]
+            i = 0  # 다시 첫번째 인덱스로 변환
+            flag = False  # i값 중복변환 방지
+    if flag:
+        i += 1  # 다음 인덱스로
+
+if len(words) != 0:
+    for word in words:
+        print(word, end='')
+else:
+    print("FRULA")
