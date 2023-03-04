@@ -28,3 +28,88 @@ N×N 크기의 공간에 물고기 M마리와 아기 상어 1마리가 있다.
 만약 거리가 같은 공간이 여러개라면, 가장 위에 있는 물고기, 왼쪽에 있는 물고기 순으로 좌표를 정렬한다.
 배열을 탐색하였을때 더이상 물고기를 찾을수 없는 상황이라면, 반복을 종료한다.(엄마 상어에게 도움을 요청한다.)
 '''
+# 아기상어의 초기 위치는 9로 주어진다.
+from collections import deque
+n = int(input())
+
+# 물고기 정보 입력받기
+graph = [list(map(int, input().split())) for _ in range(n)]
+
+# 아기상어의 초기위치와 크기 지정
+x, y, size = 0, 0, 2
+
+for i in range(n):
+    for j in range(n):
+        # 아기상어의 초기위치 발견시
+        if graph[i][j] == 9:
+            x, y = i, j  # 초기위치 지정
+            graph[i][j] = 0  # 빈공간으로 지정(아기상어가 움직이기 시작할것이므로)
+
+
+# 방향벡터 정의
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
+
+
+# 먹을수 있는 물고기를 탐색하여 거리를 측정하는 함수(bfs)
+def search(x, y):  # 현재 아기상어의 위치를 대상으로 먹을수 있는 물고기의 위치를 파악하여 리턴
+    # bfs를 통해 현재 위치에서 먹을수 있는 물고기 위치 탐색
+    fish_position = []  # 물고기의 위치와 크기를 저장
+    queue = deque()
+    queue.append([x, y])
+    # 물고기의 이동 정보를 저장할 배열
+    visited = [[-1]*n for _ in range(n)]
+    visited[x][y] = 0  # 현재 위치 방문 처리 => 거리 누적
+    while queue:
+        # 아기상어의 현재 위치를 팝
+        cur_x, cur_y = queue.popleft()
+        # 네가지 방향에 대해서 bfs
+        for i in range(4):
+            nx = cur_x + dx[i]
+            ny = cur_y + dy[i]
+            # 영역을 벗어나지 않으면서 한번도 방문하지 않은 좌표에 대하여
+            if 0 <= nx < n and 0 <= ny < n and visited[nx][ny] == -1:
+                # 해당 좌표의 물고기의 크기가 size보다 작거나 같다면(이동 가능하다면)
+                if graph[nx][ny] <= size:
+                    # 거리를 누적하며 이동
+                    visited[nx][ny] = visited[cur_x][cur_y] + 1
+                    # 큐에 좌표 삽입
+                    queue.append([nx, ny])
+                    # 먹을 수 있는 물고기(크기가 0이 아니면서 자기 크기보다 작아야함)라면 배열에 좌표와 해당 물고기까지의 거리 삽입
+                    if 0 < graph[nx][ny] < size:
+                        fish_position.append([nx, ny, visited[nx][ny]])
+    # 먹을수 있는 물고기 탐색이 끝난후
+    # 배열을 거리순, 위에있는 물고기순, 왼쪽에 있는 물고기 순으로 정렬하여 리턴
+    # 2번째 인자:거리, 0번째 인자:배열의 행 정보, 1번째 인자: 배열의 열 정보
+    return sorted(fish_position, key=lambda x: (-x[2], -x[0], -x[1]))
+
+
+time = 0  # 아기상어가 엄마상어 도움없이 잡아먹을수 있는 시간
+bite = 0  # 현재 탐색에서 먹은 물고기의 수
+
+while True:
+    # 아기상어의 현재 위치를 기준으로 먹을수 있는 물고기들의 좌표 탐색
+    fish_position = search(x, y)
+    # 만약 먹을수 있는 물고기가 없다면 무한반복 탈출
+    if len(fish_position) == 0:
+        break
+
+    # 먹을수 있는 물고기중 가장 가까운 거리의 물고기로 이동
+    nx, ny, distance = fish_position.pop()
+    # 반복문을 사용하여 배열의 모든값을 탐색하지 않는 이유는,
+    # 물고기를 섭취함으로써 가장 가까운 거리의 물고기가 변경되기때문에 다시 search를 해야하기 때문이다.
+
+    # 물고기 잡아먹기
+    graph[nx][ny] = 0  # 잡아먹었다는 의미로 공간을 비우고
+    x, y = nx, ny  # 물고기의 현재 좌표를 변경시킨다.
+    # 물고기를 잡아먹으러 이동하는 거리가 즉 시간이므로 시간을 누적시킨다
+    time += distance
+    bite += 1  # 물고기 1마리를 잡아먹었다는 의미로 1을 더해주고
+
+    # 잡아먹은 물고기의 수가 아기상어의 크기와 같다면 아기상어의 크기를 증가시킨다.
+    if bite == size:
+        size += 1
+        bite = 0  # 다시 0으로 초기화(크기가 커진 이후부터)
+
+
+print(time)
