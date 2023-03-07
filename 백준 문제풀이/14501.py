@@ -28,3 +28,50 @@ Pi	10	20	10	20	15	40	200
 
 상담을 적절히 했을 때, 백준이가 얻을 수 있는 최대 수익을 구하는 프로그램을 작성하시오.
 '''
+# 스케쥴 개수
+n = int(input())
+
+# 스케쥴을 기록할 공간 0일째 업무 : 0일, 0원의 수익
+schedule = [[0, 0]]
+
+for i in range(n):
+    t, p = map(int, input().split())
+    schedule.append([t, p])
+
+
+benefit = 0  # 얻을수 있는 최대 이득
+
+
+# 재귀 함수 작성
+# 업무 선택(현재날짜)
+def select_job(c_date, c_benefit):
+    if c_date > n or c_date + schedule[c_date][0] > n+1:  # 당일은 일을 할 수 있으므로
+        return c_benefit  # 업무를 수락할수 없는경우는 지금까지의 수익을 리턴
+    # 현재 업무를 수락하고, 이득을 더해서 재귀함수 호출
+    s_benefit = select_job(
+        c_date+schedule[c_date][0], c_benefit+schedule[c_date][1])
+    # 업무를 선택하지 않는 경우는 날짜만 하루를 더해서 재귀호출
+    n_benefit = select_job(c_date+1, c_benefit)
+    return max(s_benefit, n_benefit)
+
+    # 날짜를 달리하며, 해당일의 업무를 수락할때와 아닐때로 결정
+# for i in range(1, n+1):
+#     # i번째 일 이후부터, n+1번째일을 수락하는 경우와 수락하지 않는 경우 모두 고려
+#     for j in range(i, n+1):
+#         # 업무를 수락할때,
+
+#     day = i  # 현재 몇일째인지를 기록
+#     temp_benefit = 0  # 현재 테스트 케이스에서 얻을수 있는 최대 이득
+#     # i번째 업무를 처리하는데 걸리는 시간이, 퇴사일보다 늦어지면 업무수행불가
+#     # 퇴사일을 넘지 않을때까지 업무 수락
+#     while day <= n:
+#         # 해당업무를 해결할수 없다면 반복문 탈출
+#         if day + schedule[day][0] > n+1:
+#             break
+#         temp_benefit += schedule[day][1]  # 이득 더하기
+#         day += schedule[day][0]  # 업무일 더하기
+#     # 모든 날짜에 대해 최대 이득 갱신
+#     benefit = max(benefit, temp_benefit)
+
+
+print(select_job(1, 0))
