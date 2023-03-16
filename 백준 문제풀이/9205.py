@@ -26,3 +26,44 @@
 이동이 가능한지 여부는 서로 이동거리를 뺐을때, 1000(20병*50m = 1000m(한번에 이동 가능))을 초과하는지 살피면 된다.
 기본 로직은 bfs로 설계하고 큐에는 편의점의 좌표들을 넣어서 방문여부를 결정하면 된다.
 '''
+from collections import deque
+t = int(input())
+
+
+def bfs(s, e):
+    queue = deque()
+    queue.append([s, e])
+
+    # 편의점 개수만큼 방문정보를 확인해야하므로 배열 생성
+    visited = [False for _ in range(n)]
+
+    while queue:
+        x, y = queue.popleft()
+        # 현재 위치에서, 목적지에 도달하는것이 가능한지(이동거리 1000으로 이동할수 있는지) 확인
+        if (abs(goal_x-x) + abs(goal_y-y)) <= 1000:
+            return "happy"  # happy 리턴
+
+        # 목적지에 아직 도달하지 못하였다면, bfs수행
+        # 편의점 좌표들 하나씩 방문
+        for i in range(n):
+            # i번째 편의점 에 아직 방문하지 않은 경우에만 방문
+            if not visited[i]:
+                # 해당 편의점에 방문이 가능한지 확인(두 좌표의 차의 합이 1000이하인지 확인)
+                if (abs(conveni[i][0]-x) + abs(conveni[i][1]-y)) <= 1000:
+                    visited[i] = True  # 해당 편의점 방문처리
+                    # 편의점의 좌표를 큐에 삽입하여, 상근이를 이동시킴
+                    queue.append([conveni[i][0], conveni[i][1]])
+
+    # 탐색 실패시 sad 리턴
+    return "sad"
+
+
+for _ in range(t):
+    n = int(input())
+    # 현재 상근이의 위치
+    s, e = map(int, input().split())
+    # 편의점 좌표들
+    conveni = [list(map(int, input().split())) for _ in range(n)]
+    # 최종 목적지
+    goal_x, goal_y = map(int, input().split())
+    print(bfs(s, e))

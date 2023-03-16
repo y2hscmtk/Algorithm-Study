@@ -11,6 +11,6 @@ for i in range(1, n+1):
         count += 1  # 약수를 하나 찾았다는 의미로 카운트 증가
         # 그리고 그 약수가 k번째로 작은 수라면 출력
         if count == k:
-            print(count)
+            print(i)
             sys.exit(0)  # 프로그램 종료
 print(0)  # 약수를 찾지 못하였다면 프로그램 종료
