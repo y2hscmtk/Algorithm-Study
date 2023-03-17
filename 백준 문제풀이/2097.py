@@ -20,8 +20,15 @@
 '''
 n = int(input())  # 조약돌의 개수
 
-i = 1
+width, hegith = 1, 1
+# 가로,세로의 길이를 단계별로 달리하며 수를 늘려나가며 조건확인
 while True:
-    dot = (i+1)*(i+1)
-
-# 둘레 출력
+    if (width+1)*(hegith+1) >= n:
+        break
+    width += 1
+    if (width+1)*(hegith+1) >= n:
+        break
+    hegith += 1
+    if (width+1)*(hegith+1) >= n:
+        break
+print(2*(width+hegith))
