@@ -23,12 +23,21 @@ n = int(input())  # 조약돌의 개수
 width, hegith = 1, 1
 # 가로,세로의 길이를 단계별로 달리하며 수를 늘려나가며 조건확인
 while True:
+    # 현재 만들어진 사각형에서 점을 놓을수 있다면
     if (width+1)*(hegith+1) >= n:
-        break
+        break  # 반복 종료
+
+    # 가로를 한칸늘려서 확인
     width += 1
+
+    # 현재 만들어진 사각형에서 점을 놓을수 있다면
     if (width+1)*(hegith+1) >= n:
-        break
+        break  # 반복 종료
+
+    # 세로를 한칸늘려서 확인
     hegith += 1
+
+    # 현재 만들어진 사각형에서 점을 놓을수 있다면
     if (width+1)*(hegith+1) >= n:
-        break
+        break  # 반복 종료
 print(2*(width+hegith))
