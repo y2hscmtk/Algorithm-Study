@@ -8,3 +8,27 @@
 
 마지막 줄에는 한신이가 알고 싶어하는 질문이 주어진다. what does the fox say?
 '''
+t = int(input())
+
+question = 'what does the fox say?'
+
+for _ in range(t):
+    # 전체 울음소리 입력받기
+    data = list(input().split())
+    while True:
+        information = list(input().split())
+        # 마지막 질문이라면
+        if ' '.join(information) == question:
+            # 정답을 출력하고
+            print(*data)
+            break  # 반복문 종료
+        # 질문이 아니라 울음소리에 대한 정보라면
+        crying = information[2]
+
+        # 원본 배열을 돌면서 울음소리 제거
+        i = 0
+        while i != len(data):
+            if data[i] == crying:
+                data.pop(i)
+                i -= 1
+            i += 1
