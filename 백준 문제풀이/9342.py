@@ -13,3 +13,26 @@
 그 다음에는 {A, B, C, D, E, F} 중 0개 또는 1개가 있으며, 더 이상의 문자는 없어야 한다.
 문자열이 주어졌을 때, 위의 규칙을 만족하는지 구하는 프로그램을 작성하시오.
 '''
+# 정규식을 이용한 풀이
+# 정규식 정리사이트
+# https://nachwon.github.io/regular-expressions/
+import re
+t = int(input())
+
+'''
+[abc] : abc 중 하나와 매치
+A? : ? 앞에 있는 문자가 없거나 하나 있을 때 매치된다.
+A+ : + 앞에 있는 문자가 최소 한 번 이상 반복되어야 매치된다.
+$ : 문자열의 마지막과 매치
+'''
+
+answer = re.compile("[A-F]?A+F+C+[A-F]?$")
+# [A-F]? : A-F사이의 문자가 0~1개 존재, A+F+C+ A,F,C가 각각 0~1개 존재, [A-F]? : A~F사이의 문자가 0~1개 존재 $ 문자열 종료
+
+for _ in range(t):
+    array = input()
+    # 작성해둔 정규식과 문자열이 일치하지 않는다면 good, 일치한다면 Infected출력
+    if answer.match(array) == None:
+        print("Good")
+    else:
+        print("Infected!")
