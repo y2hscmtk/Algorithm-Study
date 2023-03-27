@@ -23,34 +23,33 @@ count = 0  # 오리의 수 카운트
 # 더이상 방문할게 없을때까지 반복
 while True:
 
-    temp = []
     index = []
     j = 0
+    delete = False
     for i in range(len(sound)):
         # 일치하는 음성 하나씩 체크
         if sound[i] == result[j]:
-            temp.append(i)
+            index.append(i)
             j += 1
         # 울음소리 하나 저장 quack
         if j == 5:
-            index.append(temp[:])
-            temp.clear()  # 임시 배열 초기화
+            # 해당 울음소리 방문처리 => 중복 검사 방지
+            for idx in index:
+                sound[idx] = 'x'
             j = 0
+            delete = True  # 음성 하나를 지웠다면 => 오리음성이 한마리 이상 제거됐음을 의미
 
-    # 울음소리가 녹음 되었다면 방문처리
-    if len(index) >= 1:
-        count += 1  # 오리의 수 더하기
-        for array in index:
-            for i in array:
-                sound[i] = 'x'  # 방문처리 => 중복 검사 방지
-    else:
-        # x가 아닌 문자가 남아있는지 확인
-        for i in range(len(sound)):
-            if sound[i] != 'x':
+    if delete:
+        count += 1  # 오리의 수 카운트 +1
+    finish = True
+    # x가 아닌 문자가 남아있는지 확인
+    for i in range(len(sound)):
+        if sound[i] != 'x':  # 아직 방문하지 않은 글자가 있다면
+            if j != 0 or not delete:
                 print(-1)
                 sys.exit(0)
-
-        # 울음소리가 저장되지 않았다면 더 이상 확인할 필요가 없음을 의미
-        # 0마리가 있는게 아니라면 마리수를 출력, 0마리라면 -1 출력
-        print(-1 if count == 0 else count)
+            finish = False  # 아직 끝나지 않았다는 의미로
+            break
+    if finish:  # 모든 단어가 다 지워졌다면(위의 반복문을 문제없이 통과했다면)
+        print(count)  # 오리의 수 출력
         break
