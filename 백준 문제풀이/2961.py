@@ -16,3 +16,28 @@
 재료를 1개부터 N개 선택하는 모든 경우의 수에 대해서,각각 신맛과 쓴맛을 구하고
 신맛과 쓴맛의 차를 기존의 최소값과 비교하여 업데이트
 '''
+import sys
+from itertools import combinations
+n = int(input())
+# 재료 정보 (신맛, 쓴맛) 입력받기
+food = [list(map(int, input().split())) for _ in range(n)]
+
+result = sys.maxsize  # 신맛과 쓴맛의 최소값
+
+# 재료를 1개부터 n개 선택하는 모든 경우의 수
+for i in range(1, n+1):
+    # 재료를 i개 선택하는 모든 경우 => selected_food
+    for selected_food in combinations(food, i):
+        # 신맛, 쓴맛 초기화
+        sour, written = 1, 0
+        # 선택된 재료들을 대상으로 신맛 쓴맛 계산
+        for s, b in selected_food:
+            sour *= s  # 신맛은 재료들의 곱
+            written += b  # 쓴맛은 재료들의 합
+        # 최종적으로 쓴맛과 신맛의 차가 가장 적게 되어야함
+        # 기존 최소값과 비교하여 작은값 업데이트
+        result = min(abs(sour-written), result)
+
+# 모든 경우의 수를 돌려봤을 때
+# 쓴맛과 신맛의 최소값 출력
+print(result)
