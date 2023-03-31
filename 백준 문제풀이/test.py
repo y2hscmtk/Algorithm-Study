@@ -1,55 +1,42 @@
-# https://www.acmicpc.net/problem/12933
-'''
-오리의 울음 소리는 "quack"이다. 올바른 오리의 울음 소리는 울음 소리를 한 번 또는 그 이상 연속해서 내는 것이다. 
+from collections import deque
 
-예를 들어, "quack", "quackquackquackquack", "quackquack"는 올바른 오리의 울음 소리이다.
+# 상, 하, 좌, 우 이동을 위한 dx, dy 리스트
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
-녹음한 소리는 문자열로 나타낼 수 있는데, 한 문자는 한 오리가 낸 소리이다. 
+# 얼음 미로의 크기를 입력받음
+n, m = map(int, input().split())
 
-오리의 울음 소리는 연속될 필요는 없지만, 순서는 "quack"이어야 한다. "quqacukqauackck"과 같은 경우는 두 오리가 울었다고 볼 수 있다.
+# 얼음 미로를 나타내는 2차원 리스트 생성
+ice_maze = [list(map(int, input().split())) for _ in range(n)]
 
-영선이가 녹음한 소리가 주어졌을 때, 영선이 방에 있을 수 있는 오리의 최소 개수를 구하는 프로그램을 작성하시오.
+# 각 칸이 언제 [빈 칸]이 될지에 대한 정보도 2차원 리스트에 저장
+for i in range(n):
+    for j in range(m):
+        if ice_maze[i][j] > 0:  # [얼음 벽]인 경우 음수로 저장하여 구분
+            ice_maze[i][j] = -ice_maze[i][j]
 
-영선이 방에 있을 수 있는 오리의 최소 수를 구하는 프로그램을 작성하시오. 녹음한 소리가 올바르지 않은 경우에는 -1을 출력한다.
-'''
+# BFS를 위한 큐 생성 및 초기화
+queue = deque()
+queue.append((0, 0))  # 시작점 (0, 0)을 큐에 추가
+ice_maze[0][0] = 0  # 시작점의 값을 0으로 변경
 
-import sys
-sound = list(input())
+# BFS 실행
+while queue:
+    x, y = queue.popleft()
+    for i in range(4):  # 상, 하, 좌, 우 이동
+        nx, ny = x + dx[i], y + dy[i]
+        if 0 <= nx < n and 0 <= ny < m:
+            # 방문한 칸이 [빈 칸]인 경우
+            if ice_maze[nx][ny] == 0:
+                ice_maze[nx][ny] = ice_maze[x][y] + 1
+                queue.append((nx, ny))
+            # 방문한 칸이 [얼음 벽]인 경우
+            elif ice_maze[nx][ny] < 0:
+                # 해당 칸이 [빈 칸]이 될 때까지 걸리는 시간을 더하여 방문
+                if ice_maze[nx][ny] > ice_maze[x][y] - 1:
+                    ice_maze[nx][ny] = ice_maze[x][y] - 1
+                    queue.append((nx, ny))
 
-result = ["q", "u", "a", "c", "k"]
-
-count = 0  # 오리의 수 카운트
-# 배열을 돌면서, 울음소리에 해당하는게 있다면 방문처리(x로 변경)
-# 더이상 방문할게 없을때까지 반복
-while True:
-
-    index = []
-    j = 0
-    delete = False
-    for i in range(len(sound)):
-        # 일치하는 음성 하나씩 체크
-        if sound[i] == result[j]:
-            index.append(i)
-            j += 1
-        # 울음소리 하나 저장 quack
-        if j == 5:
-            # 해당 울음소리 방문처리 => 중복 검사 방지
-            for idx in index:
-                sound[idx] = 'x'
-            j = 0
-            delete = True  # 음성 하나를 지웠다면 => 오리음성이 한마리 이상 제거됐음을 의미
-
-    if delete:
-        count += 1  # 오리의 수 카운트 +1
-    finish = True
-    # x가 아닌 문자가 남아있는지 확인
-    for i in range(len(sound)):
-        if sound[i] != 'x': # 아직 방문하지 않은 글자가 있다면
-            if j != 0 or not delete: # 
-                print(-1)
-                sys.exit(0)
-            finish = False # 아직 끝나지 않았다는 의미로
-            break
-    if finish: # 모든 단어가 다 지워졌다면(위의 반복문을 문제없이 통과했다면)
-        print(count) # 오리의 수 출력
-        break
+# 도착점의 값을 출력
+print(ice_maze[n-1][m-1])
