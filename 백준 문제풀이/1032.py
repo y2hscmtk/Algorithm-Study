@@ -19,3 +19,22 @@ dir *.exe라고 치면 확장자가 exe인 파일이 다 나온다.
 
 그 디렉토리에는 검색 결과에 나온 파일만 있다고 가정하고, 파일 이름의 길이는 모두 같다.
 '''
+n = int(input())
+
+data = []
+# 출력값 입력받기
+for _ in range(n):
+    data.append(input())
+
+# 첫번째 문자열을 미리 정답에 넣어두고
+result = list(data[0][:])
+# 그다음 문자열들을 하나씩 비교해가며 일치하지 않는단어가 존재한다면
+# ?로 변환하는 작업을 실시
+for i in range(n):
+    for j in range(len(result)):
+        # 일치하지 않는 알파벳이 존재할경우 ?로 변환
+        if data[i][j] != result[j]:
+            result[j] = '?'
+
+for alphabet in result:
+    print(alphabet, end='')
