@@ -14,7 +14,8 @@ number = list(map(int, input().split()))
 # +,-,*,//
 operator = list(map(int, input().split()))
 
-max_num, min_num = -(10**8), 10**8
+max_num = -1000000000
+min_num = 1000000000
 
 
 # 백트래킹
@@ -39,7 +40,7 @@ def calc(num, i):
             # 음수를 양수로 나눌 때는 C++14의 기준을 따른다.
             # 즉, 양수로 바꾼 뒤 몫을 취하고 그 몫을 음수로 바꾼 것과 같다
             elif j == 3:  # 나누기 연산의 경우
-                calc(abs(abs(num)//number[i+1]), i+1)  # 해당 연산의 수행 결과를 넘김
+                calc(int(num/number[i+1]), i+1)  # 해당 연산의 수행 결과를 넘김
             operator[j] += 1
 
 
