@@ -5,9 +5,11 @@ from collections import deque
 
 벽을 K개 까지 부수고 이동하여도 된다.
 '''
+from sys import stdin
+input = stdin.readline
 n,m,k = map(int,input().split())  # 벽은 k개까지 부술수 있다.
 # 전체 맵 입력받기
-graph = [list(map(int,input())) for _ in range(n)]
+graph = [list(map(int,input().strip())) for _ in range(n)]
 # 벽을 k개까지 부술 수 있으므로, k차원의 visited배열이 필요하다.
 visited = [[[0]*(k+1) for _ in range(m)] for _ in range(n)]
 # 방향 벡터 정의
@@ -33,15 +35,15 @@ def bfs():
             nx = x + dx[i]
             ny = y + dy[i]
             # 범위를 벗어나지 않는다면
-            if 0<=nx<n and 0<=ny<m and visited[nx][ny][count] == 0:
+            if 0<=nx<n and 0<=ny<m:
                 # 만약 빈공간을 만났고, 아직 방문한적 없다면
-                if graph[nx][ny]==0:
+                if graph[nx][ny]==0 and visited[nx][ny][count] == 0:
                     visited[nx][ny][count] = visited[x][y][count] +1 # 거리 누적
                     queue.append([nx,ny,count]) # 큐에 근접좌표 삽입
                 # 만약 벽(1)을 만났고, 아직 벽을 부술수 있다면
                 # k개만큼 벽을 부술 수 있으므로
                 # 이미 부수고 온 벽에 대한 탐색을 더 진행하지 않아야함
-                elif graph[nx][ny]==1 and count<k:
+                elif graph[nx][ny]==1 and count<k and visited[nx][ny][count+1] == 0:
                     visited[nx][ny][count+1] = visited[x][y][count] + 1
                     # 거리를 누적시키고, 벽을 1개 추가로 부쉈다는 의미인 배열에 삽입
                     queue.append([nx,ny,count+1]) # 벽을 하나 부쉈다는 의미를 함께 넣어줌
