@@ -4,7 +4,7 @@ data = list(map(int,input().split()))
 maxNum = max(data)
 dict = {0:0}
 i = 1 # 1을 고려하지 않았네..
-while i!=2*maxNum:
+while i!=2**63:
     dict[i] = 0
     i *= 2
 for num in data:
@@ -16,15 +16,12 @@ for key in dict:
     if key==0: # 0인 경우는 무시
         continue
     count = dict[key] # 해당 수가 몇개인지
-    # 현재 키에서 2배를 한값이, 가장 큰 수의 4배값이라면 
+    # 현재 키에서 2배를 한값이, 가장 큰 수의 2배값이라면 
     # => 마지막까지 압축을 마쳤다는 의미가 됨
-    if key*2 == 4**maxNum:
+    if key*2 == 2**63:
         break
     # count//2개만큼의 다음수가 생김
-    if key**2 not in dict:
-        dict[key*2] = count//2
-    else:
-        dict[key*2] += (count//2)
+    dict[key*2] += (count//2)
 
 for key,item in sorted(dict.items(), reverse=True):
     if item!=0:
