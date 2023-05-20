@@ -67,7 +67,7 @@ def bfs():
                             # 거리를 누적시키고, 벽을 1개 추가로 부쉈다는 의미인 배열에 삽입
                             queue.append([nx,ny,count+1,(time+1)%2,0]) # 벽을 하나 부쉈다는 의미를 함께 넣어줌
                             
-    return -1 # 탐색 실패
+    return -1 # 탐색 실패 => -1 리턴
 
 print(bfs())
             
