@@ -1,7 +1,1 @@
-time = 1
-# print(time)
-# print((time+1) % 2)
-
-for i in range(10):
-    time += 1
-    print((time) % 2)
+boolean adult,String belongs_to_collection,int budget,String genres,String homepage,int id,String imdbId,String original_language,tring original_title,String overview,double popularity,String poster_path,String production_companies,String production_countries,String release_date,long revenue,int runtime,String spoken_languages,String status,String tagline,String title,boolean video,double vote_average,int vote_count,
