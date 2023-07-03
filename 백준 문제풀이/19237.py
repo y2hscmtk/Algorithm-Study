@@ -39,7 +39,6 @@ priority = [[list(map(int,input().split())) for _ in range(4)] for _ in range(m)
 # 첫번째 인자는 냄새를 남긴 상어의 번호, 두번째 인자는 냄새가 사라지기까지 남은 시간 => 이동후 업데이트 필요
 smell = [[[0,0] for _ in range(n)] for _ in range(n)]
 
-
 # 방향벡터 설정
 # 상,하,좌,우를 기준으로 접근할수 있도록
 # dx[direction-1],dy[direction-1] // direction = 1일때, (-1,0)씩 각 좌표에 더해져 위쪽으로 이동됨 
@@ -159,11 +158,6 @@ def spread_smell():
         # 냄새를 뿌린다.
         if x!=-1 and y!=-1:
             smell[x][y] = [i+1,k]
-    # for i in range(n):
-    #     for j in range(n):
-    #         shark = box[i][j]
-    #         if shark != 0:
-    #             smell[i][j] = shark,k
 
 
 # 냄새정보 업데이트
@@ -177,7 +171,6 @@ def update():
                 # 카운트가 0이 되었다면, 해당 좌표의 냄새를 지운다
                 if smell[i][j][1] == 0:
                     smell[i][j][0] = 0
-
 
 
 # 각 상어별 현재 위치
@@ -201,7 +194,6 @@ while True:
     if time>=1000:
         print(-1)
         break
-    
     
     # 맨 처음에는 모든 상어가 자신의 위치에 자신의 냄새를 뿌린다
     spread_smell()
