@@ -70,6 +70,7 @@ def define_next_position(shark_num,x,y):
     # 그렇지 않다면 우선순위별 이동방향을 결정한다.
     next_direction = 0
     array = []
+    found = False
     for i in range(4):
         nx = x + dx[i]
         ny = y + dy[i]
@@ -79,72 +80,38 @@ def define_next_position(shark_num,x,y):
             if smell[nx][ny][0] == 0:
                 array.append([nx,ny])
                 next_direction = (i+1)
-    # 값을 결정했다면 이동하는 방향이 상어의 이동 방향이됨
-    # 해당 상어의 이동방향 설정 필요
-    if len(array) == 1: # 하나의 좌표만 들어와있다면 리턴
-        # 이동방향 재설정
-        sharck_direction[shark_num-1] = next_direction
-        return array[0]
-    elif len(array) > 1: # 조건을 만족하는 값이 여러개라면 방향별 우선순위로 반환
-        # 우선순위 높은 값 검사
-        # 우선순위 배열로부터 좌표 생성
-        # num-1번의 상어의 현재 방향에서의 우선순위
-        curr_p = priority[shark_num-1][d]
-        for i in range(len(curr_p)):
-            p_dir = curr_p[i]-1
-            nx = x + dx[p_dir]
-            ny = y + dy[p_dir]
-            
-            # array에서
-            # 일치하는 좌표가 있는지 확인
-            # 가장 먼저 발견되는 좌표로 이동 => 우선순위가 제일 높은 좌표임
-            for j in range(len(array)):
-                if array[j][0] == nx and array[j][1] == ny:
-                    # 해당 상어의 이동방향 변경후 값 반환
-                    sharck_direction[shark_num-1] = p_dir+1
-                    return nx,ny
-            
+                found = True
     # 좌표를 반환하지 못했다 => 상하좌우 다 냄새가 있다.
-    # 2. 자신의 냄새가 있는 칸의 방향으로 잡는다.
-    # 조건을 만족하는 만족하는 값이 여러개라면 방향별 우선순위로 반환
-    next_direction = 0
-    array = []
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        # 배열을 벗어나지 않는지 확인
-        if 0<=nx<n and 0<=ny<n:
-            # 자신의 냄새가 있는 칸인지 확인
-            if smell[nx][ny][0] == shark_num:
-                array.append([nx,ny])
-                next_direction = (i+1)
-
+    #아무 냄새도 없는 칸을 찾지 못했다면 자신의 냄새가 있는 칸 찾기
+    if not found:
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            # 배열을 벗어나지 않는지 확인
+            if 0<=nx<n and 0<=ny<n:
+                # 자신의 냄새가 있는 칸인지 확인
+                if smell[nx][ny][0] == shark_num:
+                    array.append([nx,ny])
     # 값을 결정했다면 이동하는 방향이 상어의 이동 방향이됨
     # 해당 상어의 이동방향 설정 필요
-    if len(array) == 1: # 하나의 좌표만 들어와있다면 리턴
-        # 이동방향 재설정
-        sharck_direction[shark_num-1] = next_direction
-        return array[0]
-    elif len(array) > 1: # 조건을 만족하는 값이 여러개라면 방향별 우선순위로 반환
-        # 우선순위 높은 값 검사
-        # 해당 상어의 현재 위치별 우선순위 배열을 돌면서
-        # 해당 위치로 이동했을때의 값을 찾고, 해당 값이 배열에 존재하면 그곳으로 이동
-        # 방향도 그 방향으로 설정
-        curr_p = priority[shark_num-1][d]
-        for i in range(len(curr_p)):
-            p_dir = curr_p[i]-1
-            nx = x + dx[p_dir]
-            ny = y + dy[p_dir]
-            
-            # array에서
-            # 일치하는 좌표가 있는지 확인
-            # 가장 먼저 발견되는 좌표로 이동 => 우선순위가 제일 높은 좌표임
-            for j in range(len(array)):
-                if array[j][0] == nx and array[j][1] == ny:
-                    # 해당 상어의 이동방향 변경후 값 반환
-                    sharck_direction[shark_num-1] = p_dir+1
-                    return nx,ny
-
+    # 조건을 만족하는 값이 여러개라면 방향별 우선순위로 반환
+    # 우선순위 높은 값 검사
+    # 우선순위 배열로부터 좌표 생성
+    # num-1번의 상어의 현재 방향에서의 우선순위
+    curr_p = priority[shark_num-1][d]
+    for i in range(len(curr_p)):
+        p_dir = curr_p[i]-1
+        nx = x + dx[p_dir]
+        ny = y + dy[p_dir]
+        
+        # array에서
+        # 일치하는 좌표가 있는지 확인
+        # 가장 먼저 발견되는 좌표로 이동 => 우선순위가 제일 높은 좌표임
+        for j in range(len(array)):
+            if array[j][0] == nx and array[j][1] == ny:
+                # 해당 상어의 이동방향 변경후 값 반환
+                sharck_direction[shark_num-1] = p_dir+1
+                return nx,ny
 
 # 상어의 위치를 결정하는 함수
 # 같은 위치에 여러마리 상어가 있는지 검사하고, 생존할 상어를 결정
