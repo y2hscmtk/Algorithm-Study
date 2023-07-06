@@ -1,2 +1,7 @@
-print(*sorted(list(set(i for i in range(1, 31))-set(int(input())
-      for _ in range(28)))), sep='\n')
+# https://www.acmicpc.net/problem/11719
+
+while True:
+    try:
+        print(input())
+    except:
+        break
