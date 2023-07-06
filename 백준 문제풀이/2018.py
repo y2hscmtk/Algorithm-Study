@@ -30,5 +30,23 @@ else lf++ //sum[lf:rf+1] > 10인 경우, 너무 많이 더했으므로, 덜 더�
 
 1 2 3 4 5 6 7 8  9 10
                     ↑
-                    ↑ if lf==n && rf==n; print(count); break;
+                    ↑ if rf==n; print(count); break;
 '''
+count = 0 # 만들 수 있는 경우의 수 (정답)
+n = int(input())
+data = [i for i in range(1,n+1)]
+lf,rf = 0,0 # 포인터의 초기 위치 0
+
+while True:
+    if rf==n:
+        break 
+    temp = sum(data[lf:rf+1])
+    if temp == n:
+        count+=1
+        rf+=1
+    elif temp < n:
+        rf+=1
+    elif temp > n:
+        lf+=1
+
+print(count)
