@@ -54,16 +54,6 @@ def dust_move():
     dust = temp  # 원본 배열로 변경
 
 
-# 먼지 상황 출력
-def print_dust():
-    print("-----------------------")
-    for i in range(R):
-        for j in range(C):
-            print(dust[i][j], end=' ')
-        print("")
-    print("-----------------------")
-
-
 # 반시계방향 먼지 청소(윗 부분)
 def clean_ccw():
     global dust
@@ -159,12 +149,8 @@ while T != 0:
     T -= 1  # 1초 경과
     # 미세먼지 확산
     dust_move()
-    # 디버깅용
-    # print_dust()
-    # 공기 청정기 작동
     # 1. 반시계 작동(위쪽)
     clean_ccw()
-
     # 2. 시계 작동(아래쪽)
     clean_cw()
 print(curr_dust())
