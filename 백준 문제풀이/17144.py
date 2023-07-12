@@ -68,13 +68,37 @@ def print_dust():
 def clean_ccw():
     global dust
     # 공기청정기 상단이 가장 위 인 경우 생각
-    # => 마지막칸이 비어있지 않다면 더이상 순환하지 못함 + 나머지 세부분 생각할 필요 x
     if r1 == 0:
-        if dust[r1][-1] == 0:
-            pass
+        for i in range(C-2, -1, -1):
+            # 오른쪽으로 밀 수 있다면 밀기
+            if dust[0][i+1] == 0 and dust[0][i] != -1:
+                dust[0][i+1] = dust[0][i]
+                dust[0][i] = 0
     else:
-        # 순환 영역 4개로 나눠서 생각
-        pass
+        # 순환 영역 4개로 나눠서 생각 => 공기청정기로 빨려들어가므로, 무조건 제거가 보장됨 => 무조건 이동이 보장됨
+        # 맨 아래부터
+        save = [dust[r1][0]]
+        for i in range(1, C):
+            save.append(dust[r1][i])
+            dust[r1][i] = save[-2]
+            # 공기 청정기의 경우 이동하지 않음
+            if dust[r1][i] == -1:
+                dust[r1][i] = 0
+        # 오른쪽 끝
+        save = [save[-1]]  # 가장 마지막 값으로 초기화
+        for i in range(r1-1, -1, -1):
+            save.append(dust[i][C-1])
+            dust[i][C-1] = save[-2]
+        # 가장 위쪽
+        save = [save[-1]]
+        for i in range(C-2, -1, -1):
+            save.append(dust[0][i])
+            dust[0][i] = save[-2]
+        # 왼쪽 끝
+        save = [save[-1]]
+        for i in range(1, r1):
+            save.append(dust[i][0])
+            dust[i][0] = save[-2]
     pass
 
 
@@ -82,15 +106,37 @@ def clean_ccw():
 def clean_cw():
     global dust
     # 공기청정기 상단이 가장 아래 인 경우 생각
-    # => 마지막칸이 비어있지 않다면 더이상 순환하지 못함 + 나머지 세부분 생각할 필요 x
-    if r2 == 0:
-        # 마지막 칸이 비어있는지 검사
-        if dust[r2][-1] == 0:
-            pass
-        pass
+    if r2 == R-1:
+        for i in range(C-2, -1, -1):
+            # 오른쪽으로 밀 수 있다면 밀기
+            if dust[r2][i+1] == 0 and dust[r2][i] != -1:
+                dust[r2][i+1] = dust[r2][i]
+                dust[r2][i] = 0
     else:
-        # 순환 영역 4개로 나눠서 생각
-        pass
+        # 순환 영역 4개로 나눠서 생각 => 공기청정기로 빨려들어가므로, 무조건 제거가 보장됨 => 무조건 이동이 보장됨
+        # 맨 위 부터
+        save = [dust[r2][0]]
+        for i in range(1, C):
+            save.append(dust[r2][i])
+            dust[r2][i] = save[-2]
+            # 공기 청정기의 경우 이동하지 않음
+            if dust[r2][i] == -1:
+                dust[r2][i] = 0
+        # 오른쪽 끝
+        save = [save[-1]]  # 가장 마지막 값으로 초기화
+        for i in range(r2+1, R):
+            save.append(dust[i][C-1])
+            dust[i][C-1] = save[-2]
+        # 맨 아래쪽
+        save = [save[-1]]
+        for i in range(C-2, -1, -1):
+            save.append(dust[R-1][i])
+            dust[R-1][i] = save[-2]
+        # 왼쪽 끝
+        save = [save[-1]]
+        for i in range(R-2, r2, -1):
+            save.append(dust[i][0])
+            dust[i][0] = save[-2]
     pass
 
 
