@@ -91,8 +91,9 @@ def clean_ccw():
             dust[i][0] = save[-2]
     pass
 
-
 # 시계방향 먼지 청소(아랫 부분)
+
+
 def clean_cw():
     global dust
     # 공기청정기 상단이 가장 아래 인 경우 생각
