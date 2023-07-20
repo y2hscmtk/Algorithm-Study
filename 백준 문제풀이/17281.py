@@ -32,46 +32,30 @@ result = 0  # 얻을 수 있는 최대 점수
 
 def play_game(i, players):
     global result
-    ground = [1, 0, 0, 0]
-    out = 0  # 현재 이닝에서 아웃의 수 카운팅
     point = 0  # 획득한 점수
-    curr = 0  # 현재 이닝 수
     # 마지막 이닝에 도다를때까지 게임 진행
-    while curr < N:
-        # 순번 정보를 토대로 게임을 진행한다.
-        # 각 순번대로 이닝을 돌면서 각 순번에 맞는 점수 처리를 수행한다.
-        for _ in range(9):
-            if innings[curr][players[i-1]-1] == 0:  # 아웃인 경우
+    for curr_inning in innings:
+        out = 0  # 현재 이닝에서 아웃의 수 카운팅
+        # 현재 이닝에서의 그라운드의 상태
+        g1, g2, g3 = 0, 0, 0
+        # 현재 이닝에서 3아웃 전까지 수행한다.
+        while out != 3:
+            if curr_inning[players[i-1]-1] == 0:  # 아웃인 경우
                 out += 1
-                if out == 3:  # 3아웃인지 체크
-                    out = 0  # 0아웃으로 초기화
-                    ground = [1, 0, 0, 0]  # 그라운드 초기화
-                    curr += 1  # 다음 이닝으로 넘어가기
-                    i += 1  # 다음 선수부터 시작
-                    # start = i + 1  # 다음 이닝에서 게임을 시작할 타수의 번호
-                    # i값 초기화x
-                    break
-                i += 1
-                i %= 9
-                continue  # 아웃인 경우는 이동 무시
-            # 아웃이 아닌경우는 타수별로 선수들 이동
-            for j in range(3, -1, -1):
-                # 현재 자리에 선수가 있고, 이동했을때 4이상의 값이 된다면 +1
-                if ground[j] == 1:  # 선수가 있다면
-                    if j != 0:
-                        ground[j] = 0  # 선수 이동
-                    # 이동했을때 4이상의 값이 되는지 확인
-                    if j + innings[curr][players[i-1]-1] >= 4:
-                        point += 1  # 1점 추가
-                    else:  # 4 이상의 값이 아니라면(영역 안에서 이동한다면)
-                        # 해당 위치로 선수 이동
-                        ground[j+innings[curr][players[i-1]-1]] = 1
+            elif curr_inning[players[i-1]-1] == 1:  # 1루타
+                point += g3  # 현재 g3에 선수가 있다면 점수 추가
+                g1, g2, g3 = 1, g1, g2  # 선수들 한칸씩 이동
+            elif curr_inning[players[i-1]-1] == 2:  # 2루타
+                point += (g2+g3)  # g2와 g3에 있는 선수 수 만큼 점수 추가
+                g1, g2, g3 = 0, 1, g1
+            elif curr_inning[players[i-1]-1] == 3:  # 3루타
+                point += (g1+g2+g3)  # g1~g3에 있는 선수 수 만큼 점수 추가
+                g1, g2, g3 = 0, 0, 1
+            else:  # 홈런
+                point += (1+g1+g2+g3)
+                g1, g2, g3 = 0, 0, 0
             i += 1
             i %= 9  # 범위 초과 방지
-        # 9번째 선수까지 문제없이 끝났다면
-
-        # for i in range(start, len(players)):
-
     # 최대 포인트 갱신
     result = max(result, point)
 
