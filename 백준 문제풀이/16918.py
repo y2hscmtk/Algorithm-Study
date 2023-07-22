@@ -25,12 +25,25 @@ def change():
                 board[i][j] = 1
 
 
+# 다음 1초 동안 봄버맨은 아무것도 하지 않는다.
+# 폭탄에만 시간 더하기
 def add_time():
     global board, time
     time += 1  # 전체시간 +1초
     for i in range(R):
         for j in range(C):
-            board[i][j] += 1
+            if board[i][j] != 0:
+                board[i][j] += 1
+
+
+# 폭탄 설치 => 폭탄이 없는곳에 폭탄 설치
+def put_bomb():
+    global board, time
+    time += 1  # 전체시간 +1초
+    for i in range(R):
+        for j in range(C):
+            if board[i][j] == 0:
+                board[i][j] = 1
 
 
 # 격자판의 상태 출력 함수
@@ -57,7 +70,6 @@ def find_bomb():
 # 폭탄 터뜨리기
 def destroy():
     global bomb_queue, board, time
-    time += 1
     while bomb_queue:
         x, y = bomb_queue.popleft()
         board[x][y] = 0  # 현재 위치 폭탄 터뜨리기
@@ -80,16 +92,22 @@ if N == 1:
         print(''.join(b))
 else:  # 2초 이상인 경우
     change()
-    # 2초 시점부터, 폭탄을 설치하고, 기존 폭탄에는 1초를 더한다.
+
+    # 2. 다음 1초 동안 봄버맨은 아무것도 하지 않는다.
+    add_time()  # 아무것도 하지 않으므로 폭탄에만 시간이 더해진다.
+    # 3번과 4번 반복
     while time != N:
-        # 아직 시간이 남았으면 시간을 더한다.
-        add_time()
+        # 3. 다음 1초 동안 폭탄이 설치되어 있지 않은 모든 칸에 폭탄을 설치한다.
+        put_bomb()
+        # 시간이 1초가 흘렀으므로 확인한다.
         if time == N:
             break
+        # 4. 1초가 지난후에
+        add_time()
+        # 3초전에 설치된 모든 폭탄이 폭발한다.
         # 3초인 것들을 찾아 큐에 넣고
         find_bomb()
-        if bomb_queue:  # 터뜨릴 게 존재한다면
-            # 큐에 있는 폭탄을 터뜨린다. # 1초 소요
-            destroy()
+        # 큐에 있는 폭탄을 터뜨린다. # 1초 소요
+        destroy()
 
     print_board()
