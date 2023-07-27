@@ -1,20 +1,30 @@
 # https://www.acmicpc.net/problem/15665
-from itertools import permutations
+'''
+백 트래킹 활용
+set()자료형을 이용하여 중복을 방지
+'''
 n, m = map(int, input().split())
-# m개를 뽑아서 배열을 만들것
-array = list(map(int, input().split()))
-# 같은수를 최대 m개 뽑을수 있다는 의미이므로
-# array를 m배 한 배열에서 permutaion을 이용
-array *= m
 
-result = set()
+numbers = list(map(int, input().split()))
 
-for extract in permutations(array, m):
-    result.add(extract)
+numbers.sort()  # 사전순으로 증가하여 출력해야함
 
-result = list(result)
+result = []  # 정답을 저장하기 위함
 
-result.sort()  # 오름차순 정렬
 
-for data in result:
-    print(*data)
+def backtracking(count, array):
+    if count == m:
+        result.append(array)  # 생성한 숫자 set에 삽입
+        return
+
+    for i in range(n):
+        array.append(numbers[i])
+        backtracking(count+1, array)
+        array.pop()
+
+
+backtracking(0, [])  # 백트래킹으로 숫자 배열 생성
+
+# 정답 출력
+for array in result:
+    print(*array)
