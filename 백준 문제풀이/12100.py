@@ -6,7 +6,7 @@
 N = int(input()) # 보드의 크기
 # 현재 보드 상태
 board = [list(map(int,input().split())) for i in range(N)] 
-result = -1 # 정답 출력용
+result = 0 # 정답 출력용
 # 각 방향에 대한 함수 작성
 # 위로 움직일때
 def up():
@@ -27,15 +27,17 @@ def right():
 
 # 설정된 방향으로 게임 수행
 def start_game(direction):
+    global result
     for d in direction:
         if d == 0: # up
             up()
-        elif d == 1:
+        elif d == 1: # down
             down()
-        elif d == 2:
+        elif d == 2: # left
             left()
-        elif d == 3:
+        elif d == 3: # right
             right()
+    result += 1
     print("")
 
 
