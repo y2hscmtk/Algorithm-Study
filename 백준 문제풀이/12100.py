@@ -11,6 +11,23 @@ result = 0 # 정답 출력용
 # 위로 움직일때
 def up():
     global board
+    # 각 세로 줄에 대해서 판별 시작
+    # 0 1 2 3 번 줄로 명명
+    # board[j][i] # i고정 시키고, j값 바꾸면서
+    last_num,index = -1,-1
+    for i in range(4):
+        for j in range(4):
+            # 각 세로줄을 살피면서 숫자 압축
+            # 빈 공간을 만나면 건너뛰기
+            if board[j][i] == 0:
+                continue
+            # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
+            elif board[j][i] == last_num:
+                board[index][i] = board[index][j] + last_num # 숫자 합치기
+                last_num,index = 0,0
+            
+            # 또한 현재 숫자 0으로 변경
+
     print("up",end=' ')
 
 def down():
