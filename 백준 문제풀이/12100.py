@@ -21,9 +21,12 @@ def up():
             # 빈 공간을 만나면 건너뛰기
             if board[j][i] == 0:
                 continue
+            # 숫자를 만날경우
             # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
-            elif board[j][i] == last_num:
+            elif board[j][i] > 0: 
+                last_num
                 board[index][i] = board[index][j] + last_num # 숫자 합치기
+                board[j][i] = 0 # 합쳤으니까 빈공간으로 처리
                 last_num,index = 0,0
             
             # 또한 현재 숫자 0으로 변경
