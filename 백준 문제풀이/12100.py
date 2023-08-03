@@ -10,153 +10,102 @@ result = 0  # 정답 출력용
 
 
 # 각 방향에 대한 함수 작성
-# 위로 움직일때
 def up():
     global board
-    # 각 세로 줄에 대해서 판별 시작
-    # 0 1 2 3 번 줄로 명명
-    for i in range(N):
-        # board[j][i] # i고정 시키고, j값 바꾸면서
-        last_num, index = board[0][i], 0
-        for j in range(1, N):
-            # 각 세로줄을 살피면서 숫자 압축
-            # 빈 공간을 만나면 건너뛰기
-            if board[j][i] == 0:
-                continue
-            # 숫자를 만날경우
-            # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
-            elif board[j][i] > 0:
-                if last_num == board[j][i]:
-                    board[index][i] = board[index][i] + last_num  # 숫자 합치기
-                    board[j][i] = 0  # 합쳤으니까 빈공간으로 처리
-                    last_num, index = 0, 0  # 이전 숫자는 다시 0으로 기록
+    # 각 세로줄을 고정시켜놓고 생각
+    for j in range(N):
+        index = 0  # 시작 인덱스
+        for i in range(1, N):
+            if board[i][j] != 0:  # 0인 경우는 무시
+                # 숫자인 경우
+                temp = board[i][j]  # 현재 숫자 저장
+                board[i][j] = 0  # 댕겨올거니까 비우기
+
+                if board[index][j] == 0:  # 0이 연속될 수 있으므로
+                    board[index][j] = temp
+                # 이전 숫자와 같은 숫자인지 확인
+                elif temp == board[index][j]:  # 같다면
+                    board[index][j] *= 2  # 2배 처리
+                    index += 1  # 이전 index는 채워졌으니, 다음 위치 고려
                 else:  # 같지 않다면
-                    # 이전숫자와, 인덱스를 현재 숫자로 변경
-                    last_num, index = board[j][i], j
-    # 돌면서 리스트에 삽입
-    numbers = [[] for _ in range(N)]
-    for i in range(N):
-        for j in range(N):
-            if board[j][i] > 0:
-                numbers[i].append(board[j][j])
-    # 한쪽으로 몰아 넣기
-    for i in range(N):
-        for k in range(len(numbers[i])):
-            board[k][i] = numbers[i][k]
-        # 숫자 아닌부분 0으로 채우기
-        for j in range(len(numbers[i]), N):
-            board[j][i] = 0
+                    # 현재 인덱스의 옆칸에 값을 위치시켜야함
+                    index += 1
+                    board[index][j] = temp  # 숫자 당겨오기
 
 
 def down():
     global board
-    # 각 세로 줄에 대해서 판별 시작
-    # 0 1 2 3 번 줄로 명명
-    for i in range(N):
-        # board[j][i] # i고정 시키고, j값 바꾸면서
-        last_num, index = board[N-1][i], N-1
-        for j in range(N-2, -1, -1):
-            # 각 세로줄을 살피면서 숫자 압축
-            # 빈 공간을 만나면 건너뛰기
-            if board[j][i] == 0:
-                continue
-            # 숫자를 만날경우
-            # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
-            elif board[j][i] > 0:
-                if last_num == board[j][i]:
-                    board[index][i] = board[index][i] + last_num  # 숫자 합치기
-                    board[j][i] = 0  # 합쳤으니까 빈공간으로 처리
-                    last_num, index = 0, 0  # 이전 숫자는 다시 0으로 기록
+    # 각 세로줄을 고정시켜놓고 생각
+    for j in range(N):
+        index = N-1  # 시작 인덱스
+        # 두번째 아래에서 부터 확인
+        for i in range(N-2, -1, -1):
+            # 0인 경우는 무시
+            if board[i][j] != 0:
+                # 숫자인 경우
+                temp = board[i][j]  # 현재 숫자 저장
+                board[i][j] = 0  # 댕겨올거니까 비우기
+                if board[index][j] == 0:  # 0이 연속될 수 있으므로
+                    board[index][j] = temp
+                # 이전 숫자와 같은 숫자인지 확인
+                elif temp == board[index][j]:  # 같다면
+                    board[index][j] *= 2  # 2배 처리
+                    index -= 1  # 이전 index는 채워졌으니, 다음 위치 고려
                 else:  # 같지 않다면
-                    # 이전숫자와, 인덱스를 현재 숫자로 변경
-                    last_num, index = board[j][i], j
-    # 돌면서 리스트에 삽입
-    numbers = [[] for _ in range(N)]
-    for i in range(N):
-        for j in range(N-1, -1, -1):
-            if board[j][i] > 0:
-                numbers[i].append(board[j][j])
-    # 한쪽으로 몰아 넣기
-    for i in range(N):
-        for k in range(len(numbers[i])):
-            board[N-k-1][i] = numbers[i][k]
-        # 숫자 아닌부분 0으로 채우기
-        for j in range(len(numbers[i]), N):
-            board[N-j-1][i] = 0
+                    # 현재 인덱스의 옆칸에 값을 위치시켜야함
+                    index -= 1
+                    board[index][j] = temp  # 숫자 당겨오기
 
 
 def left():
     global board
-    # 각 가로 줄에 대해서 판별 시작
-    # 0 1 2 3 번 줄로 명명
-    for i in range(N):  # 가로 줄 고정
-        # board[i][j] # i고정 시키고, j값 바꾸면서
-        last_num, index = board[i][0], 0
+    # 가로줄은 고정, 세로줄을 달리하면서
+    # board[i][ ] i 고정
+    for i in range(N):
+        # 시작 인덱스
+        index = 0  # 0부터 차례로 채울것임
         for j in range(1, N):
-            # 각 가로줄 살피면서 숫자 압축
-            # 빈 공간을 만나면 건너뛰기
-            if board[i][j] == 0:
-                continue
-            # 숫자를 만날경우
-            # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
-            elif board[i][j] > 0:
-                if last_num == board[i][j]:
-                    board[i][index] = board[i][index] + last_num  # 숫자 합치기
-                    board[i][j] = 0  # 합쳤으니까 빈공간으로 처리
-                    last_num, index = 0, 0  # 이전 숫자는 다시 0으로 기록
+            if board[i][j] != 0:
+                # 0이 아닌경우
+                temp = board[i][j]  # 값 저장
+                board[i][j] = 0  # 댕겨올거니까 비우기
+
+                if board[i][index] == 0:  # 0이 연속될 수 있으므로
+                    board[i][index] = temp  # 이전 값이 0으로 비워져있다면 당겨오기
+                # 이전 숫자와 같은 숫자인지 확인
+                elif temp == board[i][index]:  # 같다면
+                    board[i][index] *= 2  # 2배 처리
+                    index += 1  # 이전 index는 채워졌으니, 다음 위치 고려
                 else:  # 같지 않다면
-                    # 이전숫자와, 인덱스를 현재 숫자로 변경
-                    last_num, index = board[i][j], j
-    # 돌면서 리스트에 삽입
-    numbers = [[] for _ in range(N)]
-    for i in range(N):
-        for j in range(N):
-            if board[i][j] > 0:
-                numbers[i].append(board[i][j])
-    # 한쪽으로 몰아 넣기
-    for i in range(N):
-        for k in range(len(numbers[i])):
-            board[i][k] = numbers[i][k]
-        # 숫자 아닌부분 0으로 채우기
-        for j in range(len(numbers[i]), N):
-            board[i][j] = 0
+                    # 현재 인덱스의 옆칸에 값을 위치시켜야함
+                    index += 1
+                    board[i][index] = temp  # 숫자 당겨오기
 
 
 def right():
     global board
-    # 각 가로 줄에 대해서 판별 시작
-    # 0 1 2 3 번 줄로 명명
-    for i in range(N):  # 가로 줄 고정
-        # board[i][j] # i고정 시키고, j값 바꾸면서
-        last_num, index = board[i][N-1], N-1
+    # 가로줄은 고정, 세로줄을 달리하면서
+    # board[i][ ] i 고정
+    for i in range(N):
+        # 시작 인덱스
+        index = N-1  # 끝에서 부터 채울것임
         for j in range(N-2, -1, -1):
-            # 각 가로줄 살피면서 숫자 압축
-            # 빈 공간을 만나면 건너뛰기
-            if board[i][j] == 0:
+            if board[i][j] == 0:  # 0인경우 무시
                 continue
-            # 숫자를 만날경우
-            # 이전 숫자와 같은 숫자인지 확인하고 같은 숫자라면 숫자 합치고, 현재 숫자는 0으로 기록
-            elif board[i][j] > 0:
-                if last_num == board[i][j]:
-                    board[i][index] = board[i][index] + last_num  # 숫자 합치기
-                    board[i][j] = 0  # 합쳤으니까 빈공간으로 처리
-                    last_num, index = 0, 0  # 이전 숫자는 다시 0으로 기록
-                else:  # 같지 않다면
-                    # 이전숫자와, 인덱스를 현재 숫자로 변경
-                    last_num, index = board[i][j], j
-    # 돌면서 리스트에 삽입
-    numbers = [[] for _ in range(N)]
-    for i in range(N):
-        for j in range(N-1, -1, -1):
-            if board[i][j] > 0:
-                numbers[i].append(board[i][j])
-    # 한쪽으로 몰아 넣기
-    for i in range(N):
-        for k in range(len(numbers[i])):
-            board[i][N-k-1] = numbers[i][k]
-        # 숫자 아닌부분 0으로 채우기
-        for j in range(len(numbers[i]), N):
-            board[i][N-j-1] = 0
+            # 0이 아닌경우
+            temp = board[i][j]  # 값 저장
+            board[i][j] = 0  # 댕겨올거니까 비우기
+
+            if board[i][index] == 0:  # 0이 연속될 수 있으므로
+                board[i][index] = temp  # 이전 값이 0으로 비워져있다면 당겨오기
+            # 이전 숫자와 같은 숫자인지 확인
+            elif temp == board[i][index]:  # 같다면
+                board[i][index] *= 2  # 2배 처리
+                index -= 1  # 이전 index는 채워졌으니, 다음 위치 고려
+            else:  # 같지 않다면
+                # 현재 인덱스의 옆칸에 값을 위치시켜야함
+                index -= 1
+                board[i][index] = temp  # 숫자 당겨오기
 
 
 # 설정된 방향으로 게임 수행
