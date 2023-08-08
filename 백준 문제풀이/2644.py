@@ -12,5 +12,41 @@
 
 여러 사람들에 대한 부모 자식들 간의 관계가 주어졌을 때, 주어진 두 사람의 촌수를 계산하는 프로그램을 작성하시오.
 '''
+from collections import deque
+import sys
 n = int(input())
 # 촌수를 계산해야 하는 서로 다른 두 사람의 번호가 주어진다.
+# 관계 표시를 위한 그래프
+graph = [[] for _ in range(n+1)]
+
+start, end = map(int, input().split())  # s와 e의 촌수를 계산
+
+for _ in range(int(input())):
+    s, e = map(int, input().split())
+    # 관계 표현
+    graph[s].append(e)
+    graph[e].append(s)
+
+
+meet = [-1]*(n+1)
+
+
+def bfs():
+    global result
+    queue = deque()
+    queue.append(start)  # 시작 노드
+    meet[start] = 0  # 만남 처리
+    while queue:
+        people = queue.popleft()
+        if people == end:  # 찾고자 하는 사람 발견시
+            return meet[people]
+        # 아직 발견하지 못했다면
+        for next_people in graph[people]:
+            if meet[next_people] == -1:  # 아직 만나지 않았다면
+                meet[next_people] = meet[people] + 1  # 만남 처리
+                queue.append(next_people)
+    return -1
+
+
+print(bfs())
+# 두 사람의 친척 관계가 전혀 없어 촌수를 계산할 수 없을 때가 있다. 이때에는 -1을 출력해야 한다
