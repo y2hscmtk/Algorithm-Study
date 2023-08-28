@@ -21,17 +21,17 @@ for _ in range(N-1):
 def bfs():
     queue = deque()
     queue.append([start, 0, 0])
-    visited = [-1]*(N+1)
-    visited[start] = 0  # 시작 좌표까지의 거리는 0
+    visited = [False]*(N+1)
+    visited[start] = True
     while queue:
-        curr_node, curr_d, max_length = queue.popleft()
+        curr_node, total, max_length = queue.popleft()
         if curr_node == end:  # 목적지 도달시
-            print(visited[end]-max_length)
+            print(total-max_length)  # 가장 긴 선분 제외하고 출력
         for node, dist in graph[curr_node]:
-            if visited[node] == -1:
-                visited[node] = curr_d + dist
-                max_length = max(max_length, dist)
-                queue.append([node, visited[node], max_length])
+            if not visited[node]:
+                visited[node] = True
+                max_length = max(max_length, dist)  # 가장 긴 선분
+                queue.append([node, total+dist, max_length])
 
 
 bfs()
