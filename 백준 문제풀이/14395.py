@@ -18,7 +18,7 @@ INF = int(10**9)
 
 
 def bfs():
-    visited = set()
+    visited = []
     queue = deque()
     queue.append([s, ""])
     while queue:
@@ -29,19 +29,19 @@ def bfs():
         # *연산의 경우
         if (x*x) <= INF and (x*x) not in visited:
             queue.append([x*x, result+"*"])
-            visited.add(x*x)  # 방문처리
+            visited.append(x*x)  # 방문처리
         # +연산의 경우
         if (x+x) <= INF and (x+x) not in visited:
             queue.append([x+x, result+"+"])
-            visited.add(x+x)  # 방문처리
+            visited.append(x+x)  # 방문처리
         # -연산의 경우 => 빼면 무조건 0 (서로 같은 수)
         if 0 not in visited:
             queue.append([0, result+"-"])
-            visited.add(0)  # 방문처리
+            visited.append(0)  # 방문처리
         # /연산의 경우 => 나누면 무조건 1(서로 같은 수)
         if x != 0 and 1 not in visited:
             queue.append([1, result+"/"])
-            visited.add(1)  # 방문처리
+            visited.append(1)  # 방문처리
     return -1  # bfs에서 찾지 못했을 경우
 
 
