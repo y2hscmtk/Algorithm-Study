@@ -1,5 +1,4 @@
 # https://www.acmicpc.net/problem/14496
-import sys
 from collections import deque
 
 a, b = map(int,input().split())
@@ -11,10 +10,11 @@ for _ in range(m):
     start,end = map(int,input().split())
     # 그래프는 단 방향
     graph[start].append(end) # 갈 수 있는 경로 기록
+    graph[end].append(start)
 
 def bfs():
-    visited = [-1]*n
-    visited[start] = 0 # 시작 노드는 0 처리
+    visited = [-1]*(n+1)
+    visited[a] = 0 # 시작 노드는 0 처리
     queue = deque()
     queue.append(a)
     while queue:
@@ -23,8 +23,9 @@ def bfs():
             return visited[b]
         for next_node in graph[node]:
             # 아직 방문하지 않은 노드에 한해서
-            if visited[next_node] != -1:
+            if visited[next_node] == -1:
                 visited[next_node] = visited[node] + 1 # 방문처리
-
+                queue.append(next_node)
+    return -1 # 탐색 불가인 경우
 
 print(bfs())
