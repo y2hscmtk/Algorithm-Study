@@ -15,6 +15,9 @@ dfs(V, E, R) {  # V : 정점 집합, E : 간선 집합, R : 시작 정점
         if (visited[x] = NO) then dfs(V, E, x);
 }
 '''
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
 n,m,r = map(int,input().split())
 
 graph = [[] for _ in range(n+1)] # 정점에 대한 간선 정보를 담기 위한 배열
@@ -27,16 +30,17 @@ for _ in range(m):
 visited = [0]*(n+1) # 모든 노드에 대한 방문정보를 저장하기 위한 방문 배열
 
 # 오름차순으로 방문을 하는 dfs함수 정의
-def dfs(start,depth): # 탐색을 시작하는 노드
-    global visited
-    visited[start] = depth # 방문처리
+def dfs(start): # 탐색을 시작하는 노드
+    global cnt
+    visited[start] = cnt # 방문처리
     graph[start].sort() # 오름차순으로 방문해야하므로 정렬
     for node in graph[start]: # 현재 노드에 연결된 모든 간선 정보 오름차순으로 분석
         if visited[node]==0: # 아직 방문하지 않았다면
-            visited[node] = True #방문처리후 dfs 수행
-            dfs(node,depth+1) # 인접 노드를 기준으로 다음 노드로 방문처리
+            cnt+=1
+            dfs(node) # 인접 노드를 기준으로 다음 노드로 방문처리
 
-dfs(r,1) # 시작노드에서 탐색 시작
+cnt = 0
+dfs(r) # 시작노드에서 탐색 시작
 
 # 시작노드에서 방문할수 없다면 0을 출력한다.
 # 방문한 순서대로 정답을 출력해야 한다.
