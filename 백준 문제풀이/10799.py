@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # https://www.acmicpc.net/problem/10799
 '''
 아이디어 : )를 만나면 (이 스택의 탑에 위치하는지 확인하여 짝이 맞는다면 탑제거
@@ -29,3 +30,22 @@ for d in data:
     
 
 print(result)
+=======
+# https://www.acmicpc.net/problem/10799
+stick = input()
+position = []  # 괄호의 위치를 저장하기 위함
+result = 0  # 나눠진 막대의 수
+
+for i in range(len(stick)):
+    if stick[i] == '(':
+        position.append(i)
+    else:
+        if stick[i-1] == '(':
+            position.pop()
+            result += len(position)
+        else:
+            position.pop()
+            result += 1
+
+print(result)
+>>>>>>> 3a64a5223799fa6fffdffbb43ba89cdd143aa81a

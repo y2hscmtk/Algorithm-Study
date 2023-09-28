@@ -47,5 +47,8 @@ for i in range(5):
 
 # 탐색결과 만들어진 정답 출력
 print(len(result))
+<<<<<<< HEAD
         
 
+=======
+>>>>>>> 3a64a5223799fa6fffdffbb43ba89cdd143aa81a
