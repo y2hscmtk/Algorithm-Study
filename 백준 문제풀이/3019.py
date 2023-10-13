@@ -64,22 +64,26 @@ for i in range(h):
         # i,j가 블럭의 첫 부분에 해당하는 위치
         # 이번에 놓으려는 블럭의 방향정보에 대해서
         for block_position in curr_block:
-            copy_graph = [g[:] for g in graph]
             # 해당 방향으로 블럭을 놓을 수 있는지 확인
             count = 0  # 블럭을 몇개 놓는데 성공했는지 => 모든 블럭은 4개의 작은 블럭임
+            temp = []  # 좌표 기록용
             for x, y in block_position:
                 nx, ny = i + x, j + y
                 # 해당 좌표에 블럭을 놓았을때 설정한 게임판의 영역을 넘어서지 않는지 확인
                 if 0 <= nx < h and 0 <= ny < c:
                     # 블럭을 놓을 수 있는 곳인지 확인
-                    if copy_graph[nx][ny] == True:  # True라면 블럭을 놓을 수 없는 위치라는 것을 의미
+                    if graph[nx][ny] == True:  # True라면 블럭을 놓을 수 없는 위치라는 것을 의미
                         break  # 해당 블럭은 못 놓는 것임
                     # 성공적으로 블럭을 놓는것에 성공
-                    copy_graph[nx][ny] = True  # 블럭 놓기
+                    graph[nx][ny] = True  # 블럭 놓기
+                    temp.append([nx, ny])
                     count += 1
             # 블럭 4개를 모두 놓는데 성공했다면
             if count == 4:
-                if check(copy_graph):  # 조건을 만족하는지 확인 => 공백 없이 설치했는지
+                if check(graph):  # 조건을 만족하는지 확인 => 공백 없이 설치했는지
                     result += 1  # 조건을 만족한다면 +1
+            # 백 트래킹
+            for nx, ny in temp:
+                graph[nx][ny] = False
 
 print(result)
