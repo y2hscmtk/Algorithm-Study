@@ -1,5 +1,7 @@
 # https://www.acmicpc.net/problem/18404
 from collections import deque
+import sys
+input = sys.stdin.readline
 n, m = map(int, input().split())  # n x n 크기의 게임판, m개의 상대편 말
 s, e = map(int, input().split())  # 나이트의 현재 위치
 
