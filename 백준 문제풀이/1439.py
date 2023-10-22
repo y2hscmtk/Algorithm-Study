@@ -1,38 +1,36 @@
-# 다솜이는 0과 1로만 이루어진 문자열 S를 가지고 있다. 다솜이는 이 문자열 S에 있는 모든 숫자를 전부 같게 만들려고 한다. 다솜이가 할 수 있는 행동은 S에서 연속된 하나 이상의 숫자를 잡고 모두 뒤집는 것이다. 뒤집는 것은 1을 0으로, 0을 1로 바꾸는 것을 의미한다.
+# https://www.acmicpc.net/problem/1439
+'''
+회진시킬 덩어리의 개수를 선택
+11 00 1 0 11
+위와 같을 경우 1 덩어리의 개수는 총 3개, 0 덩어리의 개수는 총 2개이므로
+0 덩어리 2개를 회전시키는 것이 이득임 => 2번의 회전이 최소값이 됨
 
-# 예를 들어 S=0001100 일 때,
+따라서 최소 각각의 그룹의 수를 카운팅하고, 그룹의 수가 더 적은 값을 정답으로 제출
+'''
+# 0과 1그룹의 개수
+countZero,countOne = 0,0
 
-# 전체를 뒤집으면 1110011이 된다.
-# 4번째 문자부터 5번째 문자까지 뒤집으면 1111111이 되어서 2번 만에 모두 같은 숫자로 만들 수 있다.
-# 하지만, 처음부터 4번째 문자부터 5번째 문자까지 문자를 뒤집으면 한 번에 0000000이 되어서 1번 만에 모두 같은 숫자로 만들 수 있다.
+number = input()
 
-# 문자열 S가 주어졌을 때, 다솜이가 해야하는 행동의 최소 횟수를 출력하시오.
+# 0그룹 카운팅
+meetZero,meetOne = True,False # 처음만나는 1을 대비하기 위해 meetZero는 True로
+for data in number:
+    # 만약 1을 만났다면 => 0그룹이 끊켰음을 의미
+    if data == '1' and meetZero: # 이전에 0을 만났고 1을 만난거라면 => 새로운 1그룹임
+        countOne += 1
+        meetZero = False # 이번에 만난건 1이므로 meetZero을 비활성화
+    elif data == '0':
+        meetZero = True # 0을 만났으므로 만났다는 정보를 표시
 
-# 아이디어: 배열 s를 0과 1 둘 중 하나의 수를 기준으로 잡고, 떨어져있는 덩어리가 몇개인지 파악하고, 반복결과 최솟값을 출력한다.
+# 1그룹 카운팅
+meetZero,meetOne = False,True # 처음만나는 0을 대비하기 위해 meetOne은 True로
+for i,data in enumerate(number):
+    # 만약 0을 만났다면 => 1그룹이 끊켰음을 의미
+    if data == '0' and meetOne: # 이전에 1을 만났고 0을 만난거라면 => 새로운 0그룹임
+        countZero += 1
+        meetOne = False # 이번에 만난건 0이므로 meetOne을 비활성화
+    elif data == '1':
+        meetOne = True # 1을 만났으므로 만났다는 정보를 표시
 
-s = list(map(int, input()))
-count = 0  # 1묶음의 개수
-count2 = 0
-check = 0
-# 0에 대하여 반복 실행
-for i in range(len(s)):  # 배열 s의 길이만큼 반복 실행
-    if s[i] == 0:
-        check = 0
-    elif s[i] != 0:  # 해당 배열의 인덱스가 1이라면
-        check += 1  # 1묶음의 최초 1을 만났을때 check를 +1해줌 => 1묶음의 두번째 1을 만나면 2이상의 숫자가 될것
-        if check == 1:  # 1묶음의 첫번째 요소를 만났을때에 한하여, 묶음의 개수를 증가시킨다.
-            count += 1  # 1묶음의 개수 +1
-
-check = 0
-for i in range(len(s)):  # 배열 s의 길이만큼 반복 실행
-    if s[i] == 1:
-        check = 0
-    elif s[i] != 1:  # 해당 배열의 인덱스가 1이라면
-        check += 1  # 1묶음의 최초 1을 만났을때 check를 +1해줌 => 1묶음의 두번째 1을 만나면 2이상의 숫자가 될것
-        if check == 1:  # 1묶음의 첫번째 요소를 만났을때에 한하여, 묶음의 개수를 증가시킨다.
-            count2 += 1  # 1묶음의 개수 +1
-
-if count < count2:
-    print(count)
-else:
-    print(count2)
+# 두 그룹의 수를 비교하여 적은 그룹의 수를 정답으로 제출
+print(countOne) if countOne < countZero else print(countZero)
