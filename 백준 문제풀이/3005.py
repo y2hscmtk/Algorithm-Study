@@ -35,5 +35,3 @@ for i in range(c):
 
 # 정렬했을때 가장 먼저 오는 문자 출력
 print(sorted(words)[0])
-
-
