@@ -1,12 +1,13 @@
 # https://www.acmicpc.net/problem/24483
-import sys
-sys.setrecursionlimit(10**9)
-input = sys.stdin.readline
+from sys import stdin,setrecursionlimit
+input = stdin.readline
+n,m,r = map(int, input().split()) # 정점, 간선, 시작라인
+setrecursionlimit(n+10)
 
-n,m,r = map(int,input().split())
 visited = [-1]*(n+1) # 방문 정보
 graph = [[] for _ in range(n+1)] # 간선정보 기록
 count,result = 0,0 # 방문순서, 정답
+
 for _ in range(m):
     s,e = map(int,input().split())
     graph[s].append(e)
