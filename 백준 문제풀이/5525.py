@@ -12,24 +12,18 @@ m = int(input())
 s = input()
 result = 0
 
-def isCorrect(i):
-    global result
-    # Pn의 길이를 모두 검사할수 있는지 검사
-    # (배열의 영역을 벗어나지는 않는지)
-    if i + len(pn) > m:
-        return False
-    if s[i:i+len(pn)] == pn:
-        result += 1
-        return True
-    return False
+i,count = 0,0
+while i+3<=m:
+    if s[i:i+3] == 'IOI':
+        count += 1 # IOI개수 +1
+        i+=2 # 2칸 다음으로 이동(다음 I)        
+        # n개를 찾았는지 확인
+        if count == n:
+            result += 1
+            count -= 1 # 1 감소(다음시점에서 현재 IOI만 취급x)
+    else: # 발견 실패시 => 끊어짐
+        i+=1 # 다음 문자로 이동하여 검사
+        count = 0 # 끊어졌으므로 초기화
 
-
-i = 0
-while i < m:
-    # I 발견시, 패턴 검사
-    if s[i] == 'I' and isCorrect(i):
-        i += 2 # 패턴과 일치한다면 다음으로 이동
-        continue
-    i+=1 # I가 아니라면 다음 문자로 이동
 
 print(result)
