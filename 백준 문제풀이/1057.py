@@ -15,6 +15,10 @@
 서로 대결하지 않는 경우는 뭘까..?
 '''
 import sys
+from collections import deque
+
+queue = deque()
+
 n,a,b = map(int,input().split())
 count = 1 # 몇번째 매칭인지
 # 만날 때까지 반복
