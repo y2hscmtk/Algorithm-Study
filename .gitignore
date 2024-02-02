@@ -4,3 +4,4 @@ testCaseMake/
 .cph/
 *.dSYM/
 *.out
+*.bin
