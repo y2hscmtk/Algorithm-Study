@@ -34,6 +34,7 @@ while True:
         # 높이가 낮아지는 경우를 만날 경우 넓이 계산 종료, 아직 사용하지 않은 높이에 대해서 스택에 삽입
         stack.append((keep,h)) # 낮아지는 순간 바로 다음에 적어도 마지막 높이 이상의 값이 있음, 첫번째 값의 경우 바로 삽입
     # 아직 스택에 남아 있는 수들은 모두 오름차순으로 정렬되어있는 형태
+    # i는 keep으로 되어있음(keep부터 n까지는 모두 높이가 h임이 보장됨)
     for i,h in stack:
-        result = max(result,h*(len(heights)-i)) # 스택의 i번째 수이므로, 적어도 len(heights)-i개 이상은 현재 높이를 바닥에 둠
+        result = max(result,h*(len(heights)-i)) # 현재 인덱스부터 끝까지는 적어도 높이 h가 보장됨
     print(result)
