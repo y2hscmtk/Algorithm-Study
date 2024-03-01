@@ -74,24 +74,23 @@ for x,y,num in end_point:
                 # 다리는 길이가 2이상
                 if length < 2:
                     break
-                edges.append((length,num,graph[nx][ny]))
+                if num<graph[nx][ny]:
+                    key = f'{num},{graph[nx][ny]}'
+                else:
+                    key = f'{graph[nx][ny]},{num}'
+                # 현재까지 지어진 다리 거리 저장
+                if key not in bridge:
+                    bridge[key] = [length] # key 경로로 갈때의 COST
+                else:
+                    bridge[key].append(length)
                 break
-                # if num<graph[nx][ny]:
-                #     key = f'{num},{graph[nx][ny]}'
-                # else:
-                #     key = f'{graph[nx][ny]},{num}'
-                # # 현재까지 지어진 다리 거리 저장
-                # if key not in bridge:
-                #     bridge[key] = [length] # key 경로로 갈때의 COST
-                # else:
-                #     bridge[key].append(length)
 
 
-# # 생성한 키들을 바탕으로 간선 생성
-# for key in bridge:
-#     bridge[key].sort() # 오름차순 정렬
-#     s,e = map(int,key.split(','))
-#     edges.append((bridge[key][0],s,e)) # 0번째 값이 가장 작으므로 코스트가 된다.
+# 생성한 키들을 바탕으로 간선 생성
+for key in bridge:
+    bridge[key].sort() # 오름차순 정렬
+    s,e = map(int,key.split(','))
+    edges.append((bridge[key][0],s,e)) # 0번째 값이 가장 작으므로 코스트가 된다.
 
 # 크루스칼 알고리즘 수행
 '''
