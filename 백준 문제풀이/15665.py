@@ -1,30 +1,19 @@
 # https://www.acmicpc.net/problem/15665
-'''
-백 트래킹 활용
-set()자료형을 이용하여 중복을 방지
-'''
-n, m = map(int, input().split())
-
-numbers = list(map(int, input().split()))
-
-numbers.sort()  # 사전순으로 증가하여 출력해야함
-
-result = []  # 정답을 저장하기 위함
-
-
-def backtracking(count, array):
-    if count == m:
-        result.append(array)  # 생성한 숫자 set에 삽입
+import sys
+input = sys.stdin.readline
+n,m = map(int,input().split())
+numbers = sorted(list(map(int,input().split())))
+def dfs(curr):
+    if len(curr) == m: # M개의 수를 찾았으면 출력하고 재귀 종료
+        print(*curr)
         return
-
+    used = [False]*(max(numbers)+1) # 같은 수를 같은 자리에 사용할 수 없음
     for i in range(n):
-        array.append(numbers[i])
-        backtracking(count+1, array)
-        array.pop()
-
-
-backtracking(0, [])  # 백트래킹으로 숫자 배열 생성
-
-# 정답 출력
-for array in result:
-    print(*array)
+        num = numbers[i]
+        # 현재 자리에서 해당 숫자를 사용하지 않았다면
+        if not used[num]:
+            used[num] = True # 이번 자리에서 해당 숫자 사용처리
+            curr.append(num) # 숫자 넣기
+            dfs(curr)
+            curr.pop() # 백트래킹
+dfs([])
