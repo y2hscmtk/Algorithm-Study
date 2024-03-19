@@ -13,7 +13,7 @@ def dfs(curr,start):
         print(*curr)
         return
     # 2 4 4 와 같은 경우에서 같은 수를, 같은 자리에 연속해서 채택하지 않도록 하는것이 목표
-    used = [False]*max(data)
+    used = [False]*(max(data)+1)
     for i in range(start,n):
         num = data[i]
         if not used[num]: # 해당 수를 이번 자리에서 사용한적이 없다면
