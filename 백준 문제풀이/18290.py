@@ -5,15 +5,11 @@
 단, 선택한 두 칸이 인접하면 안된다. r행 c열에 있는 칸을 (r, c)라고 했을 때, (r-1, c), (r+1, c), (r, c-1), (r, c+1)에 있는 칸이 인접한 칸이다.
 '''
 import sys
+input = sys.stdin.readline
 def dfs(ci,cj):
     global result,select
     # 1. 종료조건 생각하기 : K개 골랐으면 종료
     if len(select) == K:
-        # 1.2. 선택한 칸들이 서로 인접하면 안된다.
-        for x,y in select: # 선택한 좌표들 중에서
-            for nx,ny in [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]:
-                if (nx,ny) in select: # 인접한 좌표가 존재한다면
-                    return # 종료
         # 1.3. 선택한 수들을 더한 값들의 최대값 구하기
         temp = 0
         for x,y in select:
@@ -32,6 +28,15 @@ def dfs(ci,cj):
             return
     for i in range(ci,N):
         for j in range(cj,M):
+            # nx,ny는 현재 좌표의 인접좌표들
+            error = False
+            for (nx,ny) in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
+                if (nx,ny) in select: # 인접좌표가 존재한다면 삽입 불가
+                    error = True
+                    continue
+            if error:
+                continue
+            # 인접하지 않는 좌표인 경우에만 삽입
             select.append((i,j))
             dfs(i,j)    
             select.pop() # 백트래킹
