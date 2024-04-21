@@ -20,4 +20,4 @@ def dfs(last):
 for i in range(10): 
     dfs(i)
 # 감소하는 수는 최대 1023개임(0~9876543210)
-print(sorted(list(result))[N]) if N<1023 else print(-1)
+print(sorted(list(result))[N]) if N<len(result) else print(-1)
