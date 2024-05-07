@@ -1,35 +1,37 @@
 # https://www.acmicpc.net/problem/18222
-
-# 초기에 x는 0으로 시작한다.
-x = '0'
-
-# x'을 만들어서 x에 붙이는 함수
-def make():
-    global x
-    y = ""
-    for i in range(len(x)):
-        y += str(abs(int(x[i])-1))
-
-    x += y
-
 '''
-입력된 수를 보고, 재귀함수를 호출할 횟수 결정
-1번의 수행으로 수는 기존길이**2의 길이가됨
-입력된 수보다 작은 2의 배수만큼 계산을 수행
-입력된 수 : 9 => 3번 수행
+k는 10^18 => 직접 수를 만든다면 시간초과
 
+1. X는 맨 처음에 "0"으로 시작한다. 
+2. X에서 0을 1로, 1을 0으로 뒤바꾼 문자열 X'을 만든다.
+3. X의 뒤에 X'를 붙인 문자열을 X로 다시 정의한다. 
+4. 2~3의 과정을 무한히 반복한다.
+
+조건 3에 의해, 2배씩 늘어난다는 점을 알 수 있다.
+
+<아이디어>
+가장 가까운 2의 거듭제곱 찾기
 '''
-start = 1
+k = int(input())
+# k보다 작은 2의 거듭제곱 반환
+def findPower():
+    n = 1; count = 0
+    while True:
+        if n >= k:
+            return n//2
+        n *= 2; count += 1
+        
+# 현재 수보다 작은 2의 거듭 제곱을 찾아서 현재 수에서 빼준다.
+# 위 과정을 1이 될 때 까지 반복
+# 짝수번에 왔다면 => 수가 바뀌지 않음 => 0
+# 홀수번에 왔다면 => 수가 바뀜 => 1(시작 숫자는 0)
 count = 0
-n = int(input())
 while True:
-    if start<n:
-        start*=2
-        count+=1
-    else:
-        # 해당길이를 만들수 있을만큼 함수호출
-        for i in range(count):
-            make()
+    if k == 1:
+        if count%2 == 0:
+            print(0)
+        else:
+            print(1)
         break
-    
-print(x[n-1])
+    k -= findPower()
+    count+=1
