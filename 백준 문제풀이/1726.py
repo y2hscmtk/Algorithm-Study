@@ -9,6 +9,10 @@
 특정 지역으로 이동하였을 때, 이전에 해당 지역을 방문하였을 때보다 더 단축 가능한 상황에서 방문 가능하다면 업데이트
 
 방향은 동쪽이 1, 서쪽이 2, 남쪽이 3, 북쪽이 4로 주어진다.
+
+      3(북)
+1(서)        0(동)
+      2(남)
 '''
 import sys
 from collections import deque
@@ -18,7 +22,7 @@ dx = [0,0,1,-1]; dy = [1,-1,0,0] # 동,서,남,북
 def bfs():
     queue = deque()
     # 각 방향으로 나아갔을 때에 대한 최소 명령 횟수를 저장한다.
-    visited = [[[10 for _ in range(4)] for _ in range(N)] for _ in range(M)]
+    visited = [[[sys.maxsize for _ in range(4)] for _ in range(N)] for _ in range(M)]
     visited[sx][sy][sd] = 0 # 최초 위치,방향은 방문 수 0으로 기록
     queue.append((sx,sy,sd)) 
     while queue:
@@ -33,12 +37,13 @@ def bfs():
             # 방향을 바꾸는 것 또한 하나의 명령이므로 visited 카운트 + 1
             # 카운트 증가시 기존 해당 칸의 해당 방향에 도달하기 위한 횟수보다 
             # 현재 수행으로 인해 단축되는 경우에만 이동
-            if abs(d-nd) == 2:
+
+            # (동,서),(서,동),(북,남),(남,북) 인 경우 즉 2번 회전해야 하는 경우
+            if (d,nd) == (0,1) or (d,nd) == (1,0) or (d,nd) == (3,2) or (d,nd) == (2,3):
                 if visited[x][y][d] + 2 < visited[x][y][nd]: 
-                    # 이동하려는 방향이 현재 방향과 정 반대 방향의 경우
                     visited[x][y][nd] = visited[x][y][d] + 2 # 최단거리로 업데이트
                     queue.append((x,y,nd)) # 현재 정보 큐에 삽입 후
-            else:
+            elif d != nd: # 자기 자신이 아닌경우 -> 한번의 명령으로 방향 회전이 가능한 경우
                 if visited[x][y][d] + 1 < visited[x][y][nd]: 
                     # 이동하려는 방향이 현재 방향과 정 반대 방향의 경우
                     visited[x][y][nd] = visited[x][y][d] + 1 # 최단거리로 업데이트
@@ -51,12 +56,14 @@ def bfs():
                 ny = y + k*dy[nd]
                 
                 # 현재 칸으로 이동 가능한지 파악
-                if 0<=nx<M and 0<=ny<N and graph[nx][ny] == 0:
-
+                if 0<=nx<M and 0<=ny<N:
+                    if graph[nx][ny] == 1:
+                        break # 벽이 있는 경우는 궤도가 없는 경우에 해당
+                    # 궤도가 있는 경우 이동
                     # 현재 칸으로 이동 시 기존에 해당 위치에 도달했던 이력보다 더 단축 가능한지 확인
                     if visited[x][y][nd] + 1 < visited[nx][ny][nd]:
                         visited[nx][ny][nd] = visited[x][y][nd] + 1
-                        queue.append((nx,ny,nd)) 
+                        queue.append((nx,ny,nd))
 # 0은 갈 수 없는 지역, 1은 갈 수 있는 지역
 graph = [list(map(int,input().split())) for _ in range(M)]
 
