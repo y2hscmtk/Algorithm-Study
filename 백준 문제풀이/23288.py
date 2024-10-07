@@ -80,7 +80,7 @@ def dice_move(x,y):
     # 다음에 주사위가 이동하려고 하는 칸
     nx = x + dx[dir]; ny = y + dy[dir]
     # 주사위가 이동 방향으로 한 칸 굴러간다. 만약, ** 이동 방향에 칸이 없다면, 이동 방향을 반대로 한 다음 한 칸 굴러간다.
-    if nx<0 or nx>=N or nx<0 or ny>=M:
+    if nx<0 or nx>=N or ny<0 or ny>=M:
         if dir == 0:
             dir = 2
         elif dir == 2:
@@ -95,7 +95,7 @@ def dice_move(x,y):
     # 주사위 위치 변경
     dice_x = nx; dice_y = ny
 
-    turn_dice[dir] # 주사위 이동
+    turn_dice[dir]() # 주사위 이동
     bottom = 7 - dice[0]
     
     # 주사위가 도착한 칸 (x, y)에 대한 점수를 획득한다.
@@ -134,7 +134,7 @@ turn_dice = [turn_0,turn_1,turn_2,turn_3]
 dice_x,dice_y,bottom = 0,1,3
 total_point = point[0][1] # 총 획득 가능 포인트
 dir = 0 # 처음 이동 방향은 동쪽이다.
-turn_dice[0] # 동쪽 이동
+turn_dice[0]() # 동쪽 이동
 K -= 1
 while K>0: # K만큼 수행
     dice_move(dice_x,dice_y)
