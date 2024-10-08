@@ -70,17 +70,16 @@ def turn_array(x,y,l):
     A = temp_A
 
 # 깊이가 2^L이 될 때 까지 재귀 호출
-def storm(l,depth,x,y):
-    if depth == 2**l:
-        # 배열 회전 후, 얼음 녹이기
-        turn_array(x,y,l)
-        return
-    
-    half = depth//2
-    storm(l,half,x,y) # 왼쪽 위
-    storm(l,half,x,y+half) # 오른쪽 위
-    storm(l,half,x+half,y) # 왼쪽 아래
-    storm(l,half,x+half,y+half) # 오른쪽 아래
+def storm(l):
+    global A
+    temp_A = [[0]*R for _ in range(R)]
+    L = 2**l
+    for ii in range(0, R, L):
+        for jj in range(0, R, L):
+            for i in range(L):
+                for j in range(L):
+                    temp_A[ii + i][jj + j] = A[ii + (L-j-1)][jj + i]
+    A = temp_A
 
 
 # 얼음 녹이기
@@ -106,7 +105,7 @@ def fire():
 
 # 0. 마법사 상어의 각 단계 반복
 for l in L:
-    storm(l,R,0,0)
+    storm(l)
     fire() # 얼음 녹이기
 
 # 2. 가장 큰 얼음 덩어리 구하기
