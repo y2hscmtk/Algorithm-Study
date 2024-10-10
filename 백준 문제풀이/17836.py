@@ -1,54 +1,66 @@
 # https://www.acmicpc.net/problem/17836
 '''
-벽을 만났을때, 그람을 들고 있는지, 안들고있는지 확인하여 벽을 넘을지 안넘을지 결정한다.
+두번째 시도
+
+검을 획득시 벽을 무제한으로 부술 수 있다 -> 검을 획득할 때까지 이동하는 거리 + 검이 있는 위치에서 공주가 있는 곳까지의 최단거리
+
+하지만 굳이 검을 획득하지 않고 최단거리(BFS)로 이동 하는 것이 최단 거리 일 수 있음
+
+2가지 경우를 고려하여 둘 중 더 짧은 값을 정답으로 채택
 '''
 from collections import deque
+import sys
+input = sys.stdin.readline
 
-n, m, t = map(int, input().split())
+# T는 시간 제한
+N,M,T = map(int,input().split())
 
-graph = [list(map(int,input().split())) for _ in range(n)]
+graph = []
+sx,sy = 0,0
+for i in range(N):
+    row = list(map(int,input().split()))
+    for j in range(len(row)):
+        if row[j] == 2:
+            sx,sy = i,j # 검의 위치 저장
+    graph.append(row)
 
-dx = [0,0,-1,1]
-dy = [-1,1,0,0]
-
-
-# bfs
-def bfs():
-    # 방문 정보를 기록
-    visited = [[-1]*m for _ in range(n)]
-    # 시작 좌표 방문처리
-    visited[0][0] = 0
-    gram = 10001 # 칼을 주웠을때 => 현재 걸린 시간 + 공주까지의 거리
+# 검 찾기 최단 거리
+def find_sword():
     queue = deque()
-    queue.append([0,0]) # 시작 좌표
+    visited = [[-1 for _ in range(M)] for _ in range(N)]
+    visited[0][0] = 0 # 시작 위치 방문 처리
+    queue.append((0,0))
     while queue:
         x,y = queue.popleft()
-        
-        # 목적지에 도달하였다면 최소값 리턴
-        if x==n-1 and y==m-1:
-            return min(visited[x][y],gram)
-        # 그람을 주웠을 경우
-        if graph[x][y] == 2:
-            # 현재 위치에서 공주까지의 최단거리 더해주기
-            gram = visited[x][y]-1 + n-1-x + m-1-y
-        
-        
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            # 범위 안의 수인지
-            if 0<=nx<n and 0<=ny<m and visited[nx][ny] == -1:
-                # 아래는 방문한적 없는 좌표에 대해
-                # 벽을 만났을 경우
-                if graph[nx][ny] != 1:
+        if (x,y) == (sx,sy):
+            return visited[x][y]
+        for nx,ny in [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]:
+            # 영역 검사
+            if 0<=nx<N and 0<=ny<M and visited[nx][ny] == -1:
+                if graph[nx][ny] != 1: # 벽이 아닌 경우에 한해
                     visited[nx][ny] = visited[x][y] + 1
-                    queue.append([nx,ny])
-                    
-    return gram
+                    queue.append((nx,ny))
+    return sys.maxsize # 검에 도달 할 수 없을 경우
 
-# 시간을 초과하지 않았다면 정답 출력
-result = bfs()
-if result > t:
-    print('Fail')
-else:
-    print(result+1)
+def bfs(): # 탐색 시작 좌표, 검의 보유 여부
+    queue = deque()
+    visited = [[-1 for _ in range(M)] for _ in range(N)]
+    visited[0][0] = 0 # 시작 위치 방문 처리
+    queue.append((0,0))
+    while queue:
+        x,y = queue.popleft()
+        if (x,y) == (N-1,M-1):
+            return visited[x][y]
+        for nx,ny in [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]:
+            if 0<=nx<N and 0<=ny<M and visited[nx][ny] == -1:
+                if graph[nx][ny] != 1: # 벽이 아닌 경우에 한해
+                    visited[nx][ny] = visited[x][y] + 1
+                    queue.append((nx,ny))
+    return sys.maxsize # 목적지에 도달할 수 없을 경우
+
+solve1 = bfs() # 검을 사용하지 않는 경우
+# 검을 찾으려 이동하는 최단 거리 + 검에서 목적지까지의 최단 거리
+solve2 = find_sword() + abs(sx-(N-1)) + abs(sy-(M-1)) 
+
+result = min(solve1,solve2)
+print(result) if result <= T else print("Fail") # 주어진 시간 안에 찾을 수 없다면 -1을 출력한다.
