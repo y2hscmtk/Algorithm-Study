@@ -18,4 +18,4 @@ for tc in range(1,int(input())+1):
         else:
             s+=1; e-=1
     
-    print(f'{tc} {result}')
+    print(f'#{tc} {result}')
