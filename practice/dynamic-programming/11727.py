@@ -8,7 +8,7 @@
 점화식 dp[n] = dp[n-1] + dp[n-2]x2
 '''
 n = int(input())
-dp = [0]*(n+1)
+dp = [0]*(1001) # n<=1000
 dp[1],dp[2] = 1,3
 for i in range(3,n+1):
     dp[i] = (dp[i-1]%10007) + ((dp[i-2]*2)%10007)
