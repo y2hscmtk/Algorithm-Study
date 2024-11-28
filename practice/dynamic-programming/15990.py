@@ -3,6 +3,7 @@
 같은 수를 두 번 이상 연속해서 사용하면 안 된다.
 '''
 import sys
+sys.setrecursionlimit(100001)
 input = sys.stdin.readline
 
 dp = [[0 for _ in range(100001)] for _ in range(4)]
@@ -22,7 +23,7 @@ def dfs(i,n):
             # i를 보유하고 있는 상태에서 n을 만들고 싶고 k를 추가로 사용할 것
             # 현재 수는 i, 추가로 필요한 수는 n
             if k <= n: # k를 추가로 더하는 결정이 목표했던 수를 초과하지 않아야함
-                dp[i][n] += dfs(k,n-k)
+                dp[i][n] += (dfs(k,n-k)%1000000009)
     return dp[i][n]
 
 for _ in range(int(input())):
@@ -30,4 +31,4 @@ for _ in range(int(input())):
     result = 0
     for i in range(1,4):
         result += dfs(i,n-i)%1000000009
-    print(result)
+    print(result%1000000009)
