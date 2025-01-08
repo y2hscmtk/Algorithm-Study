@@ -27,13 +27,14 @@ def bfs():
         # 목적지 도달 확인
         if (x,y) == (ex,ey):
             return visited[x][y]
-        for dx,dy in range(dxs,dys):
+        for dx,dy in zip(dxs,dys):
             nx = x + dx
             ny = y + dy
-            if in_range(nx,ny) and not visited[nx][ny]:
+            if in_range(nx,ny) and visited[nx][ny] == -1:
                 # 방문 가능한 칸인지 확인
-                if graph[nx][ny] == '.':
+                if graph[nx][ny] != '#':
                     visited[nx][ny] = visited[x][y] + 1
                     queue.append((nx,ny))
+    return -1
 
 print(bfs())
