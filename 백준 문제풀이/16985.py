@@ -15,16 +15,8 @@ def rotate_arr(arr):
         for j in range(LENGTH):
             new_arr[j][LENGTH-1-i] = arr[i][j]
     return new_arr
-
-def start_rotate():
-    # 원본 배열 저장
-    copy_board = [[b[:] for b in bb] for bb in board]
-    for i, rotate_count in enumerate(rotate):
-        copy_board[i] = rotate_board[i][rotate_count]
-    return copy_board
-
-def bfs(maze):
     
+def bfs(maze):
     # 출발점과 도착점이 이동 가능한 칸인지 먼저 확인
     if maze[0][0][0] != VALID or maze[4][4][4] != VALID:
         return MAX_INT
@@ -58,8 +50,10 @@ def make_maze_and_move(new_board):
         min_move_count = min(min_move_count, bfs(maze))
 
 def simulation():
-    new_board = start_rotate()
-    make_maze_and_move(new_board)
+    copy_board = [None] * LENGTH
+    for i, rotate_count in enumerate(rotate):
+        copy_board[i] = rotate_board[i][rotate_count]
+    make_maze_and_move(copy_board)
 
 # 각 판별 회전 횟수를 결정 (0: 회전 없음, 1: 90도, 2: 180도, 3: 270도)
 rotate = [0] * LENGTH
@@ -71,6 +65,9 @@ def select_rotate(idx):
         rotate[idx] = i
         select_rotate(idx+1)
         rotate[idx] = 0
+        # 조기 종료 조건 설정 - 12 이하로는 줄어들 수 없음
+        if min_move_count == 12:
+            return
 
 board = [ [list(map(int, input().split())) for _ in range(LENGTH)] for _ in range(LENGTH) ]
 
