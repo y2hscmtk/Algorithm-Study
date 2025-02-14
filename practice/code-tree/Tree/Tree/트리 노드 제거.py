@@ -4,21 +4,26 @@
 지워진 잏후 트리에서의 리프 노드의 개수를 구하라
 '''
 n = int(input())
+
+leaf_node = 0
+root = -1
+
 # 각 노드의 부모 정보
 parent = list(map(int,input().split()))
 graph = [[] for _ in range(n)]
-root = -1
-for i in range(n):
-    p = parent[i]
-    if p == -1:
-        root = i
-        continue
-    graph[p].append(i) # 부모 -> 자식 경로 생성
-    
-remove_node = int(input())
 removed = [False]*(n)
 
-leaf_node = 0
+
+for i in range(n):
+    x,y = i,parent[i]
+    if y == -1:
+        root = x
+        continue
+    graph[y].append(x) # 부모 -> 자식 경로 생성
+    
+remove_node = int(input())
+
+
 # 아직 방문되지 않은 정점들 방문하며 리프 노드 수 파악
 def dfs(curr_node):
     global leaf_node
@@ -27,12 +32,12 @@ def dfs(curr_node):
         return
 
     # 현재 노드가 리프 노드인지 판단
-    is_leaf = False
+    is_leaf = True
     for node in graph[curr_node]:
         if removed[node]:
             continue
         dfs(node)
-        is_leaf = True
+        is_leaf = False
     
     if is_leaf:
         leaf_node += 1
